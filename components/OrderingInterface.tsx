@@ -261,6 +261,31 @@ const OrderingInterface: React.FC<OrderingInterfaceProps> = ({
       setTimeInput('');
   };
   
+  // 計算特定品項的總訂購數量
+  const getItemQuantity = (itemId: number, storeType: 'restaurant' | 'drink_shop') => {
+    return orders.reduce((total, order) => {
+      return total + order.items.filter(orderItem =>
+        orderItem.id === itemId && orderItem.storeType === storeType
+      ).length;
+    }, 0);
+  };
+
+  // 移除特定品項的最新一個實例
+  const handleRemoveClick = (itemId: number, storeType: 'restaurant' | 'drink_shop') => {
+    // 找到包含該品項的最新訂單項目
+    for (let i = orders.length - 1; i >= 0; i--) {
+      const order = orders[i];
+      // 從該成員的訂單中找到最新的該品項實例
+      for (let j = order.items.length - 1; j >= 0; j--) {
+        const item = order.items[j];
+        if (item.id === itemId && item.storeType === storeType) {
+          onRemoveItem(order.memberId, item.instanceId);
+          return;
+        }
+      }
+    }
+  };
+
   const MenuSection: React.FC<{ store: Store }> = ({ store }) => (
     <Card className="flex-1">
       <div className="p-4">
@@ -274,17 +299,44 @@ const OrderingInterface: React.FC<OrderingInterfaceProps> = ({
                 </h4>
               )}
               <div className="space-y-3">
-                {category.items.map(item => (
-                  <div key={item.id} className="w-full flex justify-between items-center p-3 bg-white rounded-lg shadow-sm" data-testid="menu-item">
-                    <div>
-                      <p className="font-medium text-slate-800">{item.name}</p>
-                      <p className="text-sm text-slate-500">${item.price.toFixed(2)}</p>
+                {category.items.map(item => {
+                  const quantity = getItemQuantity(item.id, store.type);
+                  return (
+                    <div key={item.id} className="w-full flex justify-between items-center p-3 bg-white rounded-lg shadow-sm" data-testid="menu-item">
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="font-medium text-slate-800">{item.name}</p>
+                            <p className="text-sm text-slate-500">${item.price.toFixed(2)}</p>
+                          </div>
+                          {quantity > 0 && (
+                            <div className="flex items-center gap-2">
+                              <div className="flex items-center bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full">
+                                <span className="text-sm font-semibold">已選 {quantity}</span>
+                              </div>
+                              <button
+                                onClick={() => handleRemoveClick(item.id, store.type)}
+                                className="flex items-center justify-center w-8 h-8 bg-red-100 text-red-600 rounded-full hover:bg-red-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                disabled={isDeadlineReached}
+                                title="移除一個"
+                              >
+                                <span className="text-lg font-bold">−</span>
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => handleAddClick(item, store.type)}
+                        className="flex items-center justify-center w-8 h-8 bg-green-100 text-green-600 rounded-full hover:bg-green-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        disabled={!activeMemberId || isDeadlineReached}
+                        title="新增一個"
+                      >
+                        <span className="text-lg font-bold">+</span>
+                      </button>
                     </div>
-                    <Button onClick={() => handleAddClick(item, store.type)} size="small" disabled={!activeMemberId || isDeadlineReached}>
-                      新增
-                    </Button>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           ))}

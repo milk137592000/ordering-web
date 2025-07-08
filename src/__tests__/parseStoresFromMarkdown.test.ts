@@ -179,6 +179,48 @@ describe('parseStoresFromMarkdown', () => {
         { name: '椰果', price: 10 }
       ]);
     });
+
+    it('should handle dots in item names and remove them', () => {
+      const markdown = `
+# 測試餐廳
+## 主餐
+- 三日野菜 .......... $200
+- 牛肉麵 .......... $120
+      `;
+
+      const result = parseStoresFromMarkdown(markdown, 'restaurant', idCounters);
+
+      expect(result).toHaveLength(1);
+      expect(result[0].menu[0].items).toEqual([
+        { id: 101, name: '三日野菜', price: 200 },
+        { id: 102, name: '牛肉麵', price: 120 }
+      ]);
+    });
+
+    it('should handle drinks.md format without dashes', () => {
+      const markdown = `
+# 鶴茶樓 飲料店菜單
+## 私藏古法茶
+鶴頂紅茶 .......... 35
+綠夢紅茶 .......... 40
+## 加料
+珍珠 .......... 10
+椰果 .......... 10
+      `;
+
+      const result = parseStoresFromMarkdown(markdown, 'drink_shop', idCounters);
+
+      expect(result).toHaveLength(1);
+      expect(result[0].menu).toHaveLength(1);
+      expect(result[0].menu[0].items).toEqual([
+        { id: 101, name: '鶴頂紅茶', price: 35 },
+        { id: 102, name: '綠夢紅茶', price: 40 }
+      ]);
+      expect(result[0].toppings).toEqual([
+        { name: '珍珠', price: 10 },
+        { name: '椰果', price: 10 }
+      ]);
+    });
   });
 
   describe('Edge cases', () => {

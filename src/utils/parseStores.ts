@@ -59,15 +59,27 @@ export const parseStoresFromMarkdown = (
         // Start new category
         const categoryName = line.replace(/^##\s*/, '').trim();
         currentCategory = { name: categoryName, items: [] };
-      } else if (line.startsWith('-')) {
-        // Parse menu item
-        const match = line.match(/^-\s*(.+?)\s*\$(\d+(?:\.\d+)?)/);
-        const isToppingCategory = TOPPING_CATEGORY_KEYWORDS.some(keyword => 
+      } else if (line.startsWith('-') || line.match(/^[^#\s].+\s+\d+/)) {
+        // Parse menu item - handle both formats: "- item .......... $price" and "item .......... price"
+        let match = line.match(/^-\s*(.+?)\s*\$(\d+(?:\.\d+)?)/);
+
+        // If no match with dash, try without dash (for drinks.md format)
+        if (!match) {
+          match = line.match(/^(.+?)\s*\.+\s*(\d+(?:\.\d+)?)$/);
+        }
+
+        // Also try format without dots
+        if (!match) {
+          match = line.match(/^(.+?)\s+(\d+(?:\.\d+)?)$/);
+        }
+
+        const isToppingCategory = TOPPING_CATEGORY_KEYWORDS.some(keyword =>
           currentCategory.name.includes(keyword)
         );
 
         if (match) {
-          const itemName = match[1].trim();
+          // Remove dots from item name
+          const itemName = match[1].replace(/\.+/g, '').trim();
           const itemPrice = parseFloat(match[2]);
           
           if (isToppingCategory) {

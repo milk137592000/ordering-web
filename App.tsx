@@ -8,27 +8,8 @@ import HistoryDisplay from './components/HistoryDisplay';
 import HistoricalOrderDetail from './components/HistoricalOrderDetail';
 import FirebaseConnectionStatus from './components/FirebaseConnectionStatus';
 import { LogoIcon, RefreshIcon, HistoryIcon } from './components/icons';
-// 延遲導入 Firebase 服務，避免初始化時阻塞
-let firebaseServices: any = null;
-const getFirebaseServices = () => {
-  if (!firebaseServices) {
-    try {
-      firebaseServices = require('./firebase');
-      console.log('✅ Firebase 服務載入成功');
-    } catch (error) {
-      console.error('❌ Firebase 服務載入失敗:', error);
-      // 返回模擬服務
-      firebaseServices = {
-        db: null,
-        doc: () => ({}),
-        onSnapshot: () => () => {},
-        setDoc: () => Promise.resolve(),
-        getDoc: () => Promise.resolve({ exists: () => false, data: () => null })
-      };
-    }
-  }
-  return firebaseServices;
-};
+// 導入 Firebase 服務
+import * as firebaseServices from './firebase';
 import Button from './components/common/Button';
 import { parseStoresFromMarkdown } from './src/utils/parseStores';
 
@@ -44,7 +25,7 @@ enum ViewMode {
 
 const updateSession = async (data: Partial<SessionData>) => {
     try {
-      const { db, doc, setDoc } = getFirebaseServices();
+      const { db, doc, setDoc } = firebaseServices;
       if (db) {
         const sessionRef = doc(db, 'sessions', SESSION_ID);
         await setDoc(sessionRef, data, { merge: true });
@@ -115,7 +96,7 @@ const App: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const { db, doc, onSnapshot } = getFirebaseServices();
+      const { db, doc, onSnapshot } = firebaseServices;
       if (!db) {
         console.warn('⚠️ Firebase 不可用，跳過會話監聽');
         setIsLoading(false);
@@ -162,7 +143,7 @@ const App: React.FC = () => {
   }, [sessionData?.deadline, sessionData?.isDeadlineReached]);
 
 
-  const handleStartOver = useCallback(async () => {
+  const handleCreateNewOrder = useCallback(async () => {
     setIsInitializing(true);
     try {
         const mateResponse = await fetch('mate.md');
@@ -194,7 +175,7 @@ const App: React.FC = () => {
             orderDate: now,
             createdAt: now,
         };
-        const { db: firebaseDb, doc, setDoc } = getFirebaseServices();
+        const { db: firebaseDb, doc, setDoc } = firebaseServices;
         if (firebaseDb) {
           await setDoc(doc(firebaseDb, 'sessions', SESSION_ID), newSession);
         }
@@ -287,7 +268,7 @@ const App: React.FC = () => {
       };
 
       // Save to historical orders collection
-      const { db: firebaseDb, doc, setDoc, getDoc } = getFirebaseServices();
+      const { db: firebaseDb, doc, setDoc, getDoc } = firebaseServices;
       if (firebaseDb) {
         await setDoc(doc(firebaseDb, 'historical_orders', orderId), historicalOrder);
 
@@ -440,7 +421,7 @@ const App: React.FC = () => {
   };
 
   const ProgressIndicator = () => {
-      const steps = ['選擇餐廳', '選擇飲料', '開始點餐', '訂單總覽'];
+      const steps = ['設定訂單截止時間', '選擇飲料', '開始點餐', '訂單總覽'];
       const currentStepIndex = sessionData?.phase ?? 0;
 
       return (
