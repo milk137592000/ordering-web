@@ -113,22 +113,35 @@ const App: React.FC = () => {
   // Set up Firebase listener for session data
   useEffect(() => {
     setIsLoading(true);
-    const sessionRef = doc(db, 'sessions', SESSION_ID);
-    const unsubscribe = onSnapshot(sessionRef, (docSnap) => {
-      if (docSnap.exists()) {
-        setSessionData(docSnap.data() as SessionData);
-      } else {
-        // If no session exists, it might need to be initialized.
-        setSessionData(null);
-      }
-      setIsLoading(false);
-    }, (err) => {
-      console.error("Firebase 監聽錯誤:", err);
-      setError("無法連線至即時同步服務。請檢查您的 Firebase 設定。");
-      setIsLoading(false);
-    });
 
-    return () => unsubscribe();
+    try {
+      const { db, doc, onSnapshot } = getFirebaseServices();
+      if (!db) {
+        console.warn('⚠️ Firebase 不可用，跳過會話監聽');
+        setIsLoading(false);
+        return;
+      }
+
+      const sessionRef = doc(db, 'sessions', SESSION_ID);
+      const unsubscribe = onSnapshot(sessionRef, (docSnap) => {
+        if (docSnap.exists()) {
+          setSessionData(docSnap.data() as SessionData);
+        } else {
+          // If no session exists, it might need to be initialized.
+          setSessionData(null);
+        }
+        setIsLoading(false);
+      }, (err) => {
+        console.error("Firebase 監聽錯誤:", err);
+        setError("無法連線至即時同步服務。請檢查您的 Firebase 設定。");
+        setIsLoading(false);
+      });
+
+      return () => unsubscribe();
+    } catch (error) {
+      console.error('❌ Firebase 監聽器設置失敗:', error);
+      setIsLoading(false);
+    }
   }, []);
 
   // Deadline checker effect
@@ -181,7 +194,10 @@ const App: React.FC = () => {
             orderDate: now,
             createdAt: now,
         };
-        await setDoc(doc(db, 'sessions', SESSION_ID), newSession);
+        const { db: firebaseDb, doc, setDoc } = getFirebaseServices();
+        if (firebaseDb) {
+          await setDoc(doc(firebaseDb, 'sessions', SESSION_ID), newSession);
+        }
         setViewMode(ViewMode.ORDERING);
     } catch (err) {
         console.error("建立新訂單錯誤:", err);
@@ -271,17 +287,20 @@ const App: React.FC = () => {
       };
 
       // Save to historical orders collection
-      await setDoc(doc(db, 'historical_orders', orderId), historicalOrder);
+      const { db: firebaseDb, doc, setDoc, getDoc } = getFirebaseServices();
+      if (firebaseDb) {
+        await setDoc(doc(firebaseDb, 'historical_orders', orderId), historicalOrder);
 
-      // Update order list
-      const historyRef = doc(db, 'history', 'order_list');
-      const historySnap = await getDoc(historyRef);
-      const existingOrderIds = historySnap.exists() ? (historySnap.data().orderIds || []) : [];
-      const updatedOrderIds = [orderId, ...existingOrderIds];
-      await setDoc(historyRef, { orderIds: updatedOrderIds });
+        // Update order list
+        const historyRef = doc(firebaseDb, 'history', 'order_list');
+        const historySnap = await getDoc(historyRef);
+        const existingOrderIds = historySnap.exists() ? (historySnap.data().orderIds || []) : [];
+        const updatedOrderIds = [orderId, ...existingOrderIds];
+        await setDoc(historyRef, { orderIds: updatedOrderIds });
 
-      // Clear current session
-      await setDoc(doc(db, 'sessions', SESSION_ID), {});
+        // Clear current session
+        await setDoc(doc(firebaseDb, 'sessions', SESSION_ID), {});
+      }
       setSessionData(null);
 
       alert('訂單已完成並保存到歷史記錄！');
