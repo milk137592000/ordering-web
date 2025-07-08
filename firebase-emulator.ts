@@ -86,6 +86,18 @@ export const initializeFirebaseServices = async () => {
         // 如果已經連接過模擬器，會拋出錯誤，這是正常的
         console.log('ℹ️ Firestore 模擬器已連接');
       }
+    } else {
+      // 生產環境，測試連接
+      console.log('🔥 正在測試 Firestore 連接...');
+      try {
+        // 嘗試讀取一個測試文檔來驗證連接
+        const testDoc = doc(db, 'test', 'connection');
+        await getDoc(testDoc);
+        console.log('✅ Firestore 連接測試成功');
+      } catch (error) {
+        console.error('❌ Firestore 連接測試失敗:', error);
+        // 不拋出錯誤，讓應用繼續運行
+      }
     }
     
     return { db, doc, setDoc, onSnapshot, getDoc };
