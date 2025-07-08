@@ -164,20 +164,35 @@ const getFirebaseServices = (): FirebaseServices => {
   return services;
 };
 
-const services = getFirebaseServices();
+// 延遲獲取服務，確保初始化完成
+let cachedServices: FirebaseServices | null = null;
+const getServices = (): FirebaseServices => {
+  if (!cachedServices) {
+    cachedServices = getFirebaseServices();
+  }
+  // 每次都檢查是否有更新的服務
+  const currentServices = (window as any).firebaseServices as FirebaseServices;
+  if (currentServices && currentServices.db && (!cachedServices.db || cachedServices.db === null)) {
+    cachedServices = currentServices;
+  }
+  return cachedServices;
+};
 
 // 包裝 Firebase 服務以添加重試和超時功能
 const wrappedSetDoc = async (...args: any[]): Promise<void> => {
-  return withRetry(() => services.setDoc(...args), 'setDoc');
+  const currentServices = getServices();
+  return withRetry(() => currentServices.setDoc(...args), 'setDoc');
 };
 
 const wrappedGetDoc = async (...args: any[]): Promise<any> => {
-  return withRetry(() => services.getDoc(...args), 'getDoc');
+  const currentServices = getServices();
+  return withRetry(() => currentServices.getDoc(...args), 'getDoc');
 };
 
 // onSnapshot 需要特殊處理，因為它是實時監聽器
 const wrappedOnSnapshot = (...args: any[]): (() => void) => {
   const [docRef, callback, errorCallback] = args;
+  const currentServices = getServices();
 
   const enhancedCallback = (snapshot: any) => {
     // 成功接收到數據，更新連接狀態
@@ -202,10 +217,21 @@ const wrappedOnSnapshot = (...args: any[]): (() => void) => {
     }
   };
 
-  return services.onSnapshot(docRef, enhancedCallback, enhancedErrorCallback);
+  return currentServices.onSnapshot(docRef, enhancedCallback, enhancedErrorCallback);
 };
 
-export const { db, doc } = services;
+// 動態導出，確保總是獲取最新的服務
+export const db = new Proxy({} as any, {
+  get(target, prop) {
+    const currentServices = getServices();
+    return currentServices.db?.[prop];
+  }
+});
+
+export const doc = (...args: any[]) => {
+  const currentServices = getServices();
+  return currentServices.doc(...args);
+};
 export const setDoc = wrappedSetDoc;
 export const getDoc = wrappedGetDoc;
 export const onSnapshot = wrappedOnSnapshot;

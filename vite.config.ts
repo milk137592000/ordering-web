@@ -20,7 +20,12 @@ export default defineConfig(({ mode }) => {
             manualChunks: undefined,
           },
         },
+        // 確保靜態文件被複製
+        copyPublicDir: true,
       },
+      // 將 .md 文件視為靜態資源
+      publicDir: 'public',
+      assetsInclude: ['**/*.md'],
       esbuild: {
         target: 'es2022', // 確保 esbuild 也使用正確的目標
       },
