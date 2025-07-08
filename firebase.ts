@@ -118,13 +118,53 @@ const withRetry = async <T>(
   throw new Error(`${operationName} 在 ${RETRY_CONFIG.maxRetries + 1} 次嘗試後失敗: ${lastError.message}`);
 };
 
-const services = (window as any).firebaseServices as FirebaseServices;
+// 等待 Firebase 服務初始化的函數
+const waitForFirebaseServices = (): Promise<FirebaseServices> => {
+  return new Promise((resolve, reject) => {
+    const checkServices = () => {
+      const services = (window as any).firebaseServices as FirebaseServices;
+      if (services && services.db) {
+        resolve(services);
+      } else {
+        // 如果超過 10 秒還沒有初始化，則拋出錯誤
+        setTimeout(() => {
+          const currentServices = (window as any).firebaseServices as FirebaseServices;
+          if (currentServices && currentServices.db) {
+            resolve(currentServices);
+          } else {
+            reject(new Error("Firebase 服務初始化超時。請檢查 index.html 中的 Firebase 配置。"));
+          }
+        }, 10000);
 
-if (!services || !services.db) {
-  // 如果 index.html 中的初始化腳本失敗，這個錯誤會非常明顯。
-  // 請確認您已在 index.html 中填入您自己的 firebaseConfig。
-  throw new Error("在 window 物件上找不到 Firebase 服務。index.html 中的初始化可能已失敗。");
-}
+        // 每 100ms 檢查一次
+        setTimeout(checkServices, 100);
+      }
+    };
+    checkServices();
+  });
+};
+
+// 獲取 Firebase 服務（同步方式，用於向後兼容）
+const getFirebaseServices = (): FirebaseServices => {
+  const services = (window as any).firebaseServices as FirebaseServices;
+  if (!services || !services.db) {
+    // 返回一個模擬服務，避免應用崩潰
+    console.warn("Firebase 服務尚未初始化，使用模擬服務");
+    return {
+      db: null,
+      doc: () => ({}),
+      setDoc: () => Promise.reject("Firebase not ready"),
+      onSnapshot: () => {
+        console.error("onSnapshot failed: Firebase not ready");
+        return () => {};
+      },
+      getDoc: () => Promise.reject("Firebase not ready")
+    };
+  }
+  return services;
+};
+
+const services = getFirebaseServices();
 
 // 包裝 Firebase 服務以添加重試和超時功能
 const wrappedSetDoc = async (...args: any[]): Promise<void> => {
