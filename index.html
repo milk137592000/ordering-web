@@ -26,35 +26,22 @@
   <body class="bg-slate-50 text-slate-800">
     <div id="root"></div>
     
-    <!-- 全新方法：直接在 HTML 中初始化 Firebase -->
+    <!-- 改進的 Firebase 初始化：支持模擬器 -->
     <script type="module">
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-      import { getFirestore, doc, setDoc, onSnapshot, getDoc } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+      import { initializeFirebaseServices } from "/firebase-emulator.js";
 
-      // Firebase 配置 - 已更新為您的專案設定
-      const firebaseConfig = {
-        apiKey: "AIzaSyC1IElfl_hDvSFzABKvqzLaqTNiz4zCH84",
-        authDomain: "ordering-app-aac96.firebaseapp.com",
-        projectId: "ordering-app-aac96",
-        storageBucket: "ordering-app-aac96.firebasestorage.app",
-        messagingSenderId: "937885720861",
-        appId: "1:937885720861:web:8559ab578c9687bcbb81f4",
-        measurementId: "G-0VLZJHL7WR"
-      };
-
+      // 初始化 Firebase 服務（自動檢測模擬器）
       try {
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        
-        // 將 Firebase 服務掛載到 window 物件上，以便主應用程式腳本可以存取。
-        window.firebaseServices = { db, doc, setDoc, onSnapshot, getDoc };
+        const services = await initializeFirebaseServices();
+        window.firebaseServices = services;
+        console.log('🔥 Firebase 服務初始化完成');
       } catch (error) {
         console.error("Firebase 初始化失敗:", error);
         // 如果 Firebase 初始化失敗，建立一個模擬物件以防止應用程式崩潰
         window.firebaseServices = {
-          db: null, 
-          doc: () => {}, 
-          setDoc: () => Promise.reject("Firebase not initialized"), 
+          db: null,
+          doc: () => {},
+          setDoc: () => Promise.reject("Firebase not initialized"),
           onSnapshot: () => {
             console.error("onSnapshot failed: Firebase not initialized");
             return () => {}; // 返回一個假的取消訂閱函式

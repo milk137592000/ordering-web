@@ -1,0 +1,25 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 允許所有讀寫操作（僅用於測試環境）
+    match /{document=**} {
+      allow read, write: if true;
+    }
+    
+    // 會話數據規則
+    match /sessions/{sessionId} {
+      allow read, write: if true;
+    }
+    
+    // 歷史訂單規則
+    match /historical_orders/{orderId} {
+      allow read, write: if true;
+    }
+    
+    // 訂單列表規則
+    match /history/order_list {
+      allow read, write: if true;
+    }
+  }
+}

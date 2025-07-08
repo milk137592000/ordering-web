@@ -6,14 +6,49 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "jest --config jest.config.cjs",
+    "test:watch": "jest --config jest.config.cjs --watch",
+    "test:coverage": "jest --config jest.config.cjs --coverage",
+    "test:e2e": "playwright test",
+    "test:e2e:performance": "playwright test --config=playwright-performance.config.ts",
+    "test:e2e:usability": "playwright test --config=playwright-usability.config.ts",
+    "test:e2e:all": "npm run test:e2e && npm run test:e2e:performance && npm run test:e2e:usability",
+    "test:e2e:ui": "playwright test --ui",
+    "test:firebase": "node scripts/test-firebase-improvements.js",
+    "test:firebase:specific": "node scripts/test-firebase-improvements.js",
+    "emulator:start": "firebase emulators:start --only firestore",
+    "emulator:start:ui": "firebase emulators:start --only firestore,ui",
+    "test:emulator": "playwright test --config=playwright-emulator.config.ts",
+    "test:emulator:ui": "playwright test --config=playwright-emulator.config.ts --ui",
+    "test:with-emulator": "concurrently \"npm run emulator:start\" \"wait-on http://127.0.0.1:8080 && npm run test:emulator\"",
+    "test:stable": "playwright test --config=playwright-stable.config.ts",
+    "test:stable:ui": "playwright test --config=playwright-stable.config.ts --ui",
+    "test:stability:analyze": "node scripts/test-stability-analyzer.js",
+    "test:all:stable": "npm run test:stable && npm run test:stability:analyze"
   },
   "dependencies": {
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },
   "devDependencies": {
+    "firebase-tools": "^13.0.0",
+    "@firebase/rules-unit-testing": "^3.0.0",
+    "concurrently": "^8.2.0",
+    "wait-on": "^7.2.0"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.2",
+    "@babel/preset-env": "^7.28.0",
+    "@babel/preset-react": "^7.27.1",
+    "@babel/preset-typescript": "^7.27.1",
+    "@playwright/test": "^1.53.2",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
     "@types/node": "^22.14.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
     "typescript": "~5.7.2",
     "vite": "^6.2.0"
   }

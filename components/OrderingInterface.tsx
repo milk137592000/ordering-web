@@ -275,7 +275,7 @@ const OrderingInterface: React.FC<OrderingInterfaceProps> = ({
               )}
               <div className="space-y-3">
                 {category.items.map(item => (
-                  <div key={item.id} className="w-full flex justify-between items-center p-3 bg-white rounded-lg shadow-sm">
+                  <div key={item.id} className="w-full flex justify-between items-center p-3 bg-white rounded-lg shadow-sm" data-testid="menu-item">
                     <div>
                       <p className="font-medium text-slate-800">{item.name}</p>
                       <p className="text-sm text-slate-500">${item.price.toFixed(2)}</p>
@@ -329,10 +329,10 @@ const OrderingInterface: React.FC<OrderingInterfaceProps> = ({
                             type="text"
                             value={timeInput}
                             onChange={(e) => setTimeInput(e.target.value)}
-                            placeholder="HH:MM"
+                            placeholder="設定截止時間 (HH:MM)"
                             className="px-3 py-2 bg-white border border-slate-300 rounded-lg w-28 text-center placeholder:text-slate-400"
                         />
-                        <Button onClick={handleSetDeadline} disabled={!timeInput}>設定</Button>
+                        <Button onClick={handleSetDeadline} disabled={!timeInput}>設定截止時間</Button>
                     </div>
                 )}
                 </div>
@@ -373,13 +373,13 @@ const OrderingInterface: React.FC<OrderingInterfaceProps> = ({
                             value={tempMemberName}
                             onChange={e => setTempMemberName(e.target.value)}
                             onKeyPress={handleKeyPress}
-                            placeholder="例如：陳大文"
+                            placeholder="輸入臨時成員姓名"
                             disabled={isDeadlineReached}
                             className="flex-grow px-3 py-2 bg-slate-100 border border-slate-300 rounded-lg placeholder:text-slate-400 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition disabled:bg-slate-200"
                         />
                         <Button onClick={handleAddTempMember} disabled={!tempMemberName.trim() || isDeadlineReached} variant="secondary">
                             <UserPlusIcon className="h-5 w-5 mr-2" />
-                            新增
+                            新增臨時成員
                         </Button>
                     </div>
                 </div>

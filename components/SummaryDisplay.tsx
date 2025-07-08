@@ -170,7 +170,7 @@ const SummaryDisplay: React.FC<SummaryDisplayProps> = ({
                     </div>
                     <div className="flex justify-between text-2xl font-bold pt-2 border-t border-slate-600 mt-2">
                         <span className="text-indigo-400">總金額:</span>
-                        <span className="text-indigo-400">${totals.grandTotal.toFixed(2)}</span>
+                        <span className="text-indigo-400" data-testid="total-amount">${totals.grandTotal.toFixed(2)}</span>
                     </div>
                 </div>
             </div>

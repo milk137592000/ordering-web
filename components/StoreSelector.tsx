@@ -53,10 +53,11 @@ const StoreSelector: React.FC<StoreSelectorProps> = ({ stores, onSelect, title, 
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
         {stores.map(store => (
-          <Card 
-            key={store.id} 
+          <Card
+            key={store.id}
             className="overflow-hidden transform hover:-translate-y-1 transition-transform duration-300 cursor-pointer"
             onClick={() => onSelect(store)}
+            data-testid="store-card"
             >
             <div className="h-32 bg-indigo-500 flex items-center justify-center">
                 <p className="text-white font-bold text-xl px-2 text-center">{store.name}</p>

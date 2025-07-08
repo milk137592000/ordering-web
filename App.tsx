@@ -6,9 +6,11 @@ import OrderingInterface from './components/OrderingInterface';
 import SummaryDisplay from './components/SummaryDisplay';
 import HistoryDisplay from './components/HistoryDisplay';
 import HistoricalOrderDetail from './components/HistoricalOrderDetail';
+import FirebaseConnectionStatus from './components/FirebaseConnectionStatus';
 import { LogoIcon, RefreshIcon, HistoryIcon } from './components/icons';
 import { db, doc, onSnapshot, setDoc, getDoc } from './firebase';
 import Button from './components/common/Button';
+import { parseStoresFromMarkdown } from './src/utils/parseStores';
 
 const SESSION_ID = 'active_session'; // Using a single document for the current session
 
@@ -18,115 +20,7 @@ enum ViewMode {
   HISTORICAL_DETAIL = 'historical_detail'
 }
 
-const parseStoresFromMarkdown = (
-  markdownText: string,
-  type: 'restaurant' | 'drink_shop',
-  idCounters: { store: number; item: number }
-): Store[] => {
-  const stores: Store[] = [];
-  const storeBlocks = markdownText.trim().split(/^#\s/m).filter(Boolean);
 
-  const TOPPING_CATEGORY_KEYWORDS = ['加料', '加點', '口感', '選料', '單品', '專屬', '添加'];
-  // Sort by length descending for greedy matching
-  const KNOWN_TOPPINGS = [
-    '珍珠', '黃金珍珠', '烘烏龍茶凍', '波霸', '雙Q果', '椰果', '養樂多', '波波', '仙草凍', '蜂蜜凍', '芝芝',
-    '古玉凍', '葡萄凍', '手作布丁', '芝士奶蓋', '鮮奶', '杏仁凍', '湯圓', '芋圓', '紫米', '粉粿', '紅豆',
-    '花生', '芋頭', '鶴記茶凍', '鶴記烏龍凍', '鶴記杏仁凍', '鶴記芝麻椰凍'
-  ].sort((a, b) => b.length - a.length);
-
-  const parseToppings = (nameStr: string): string[] => {
-    const toppings: string[] = [];
-    let remainingStr = nameStr;
-    while (remainingStr.length > 0) {
-        const foundTopping = KNOWN_TOPPINGS.find(t => remainingStr.startsWith(t));
-        if (foundTopping) {
-            toppings.push(foundTopping);
-            remainingStr = remainingStr.substring(foundTopping.length);
-        } else {
-            if (remainingStr.trim()) {
-                toppings.push(remainingStr.trim());
-            }
-            break;
-        }
-    }
-    return toppings;
-  };
-
-  for (const block of storeBlocks) {
-    const lines = block.trim().split('\n');
-    const storeName = lines.shift()?.trim();
-    if (!storeName) continue;
-
-    const menu: MenuCategory[] = [];
-    const storeToppings: Topping[] = [];
-    let currentCategory: MenuCategory = { name: '', items: [] };
-    let isToppingCategory = false;
-    menu.push(currentCategory);
-
-    for (const line of lines) {
-      const trimmedLine = line.trim();
-      if (!trimmedLine) continue;
-
-      if (trimmedLine.startsWith('##')) {
-        const categoryName = trimmedLine.replace('##', '').trim();
-        isToppingCategory = TOPPING_CATEGORY_KEYWORDS.some(keyword => categoryName.includes(keyword));
-        if (!isToppingCategory) {
-            if (currentCategory.items.length > 0 || currentCategory.name) {
-                currentCategory = { name: categoryName, items: [] };
-                menu.push(currentCategory);
-            } else {
-                currentCategory.name = categoryName;
-            }
-        }
-        continue;
-      }
-      
-      const colonFormatMatch = line.match(/^\s*-\s*(.+?)\s*:\s*\$?(\d+(\.\d+)?).*$/);
-      const dotsFormatMatch = line.match(/^\s*(?:-\s*)?(.*?)\s*\.{2,}\s*\$?(\d+(\.\d+)?).*$/);
-      const match = colonFormatMatch || dotsFormatMatch;
-
-      if (!match) {
-        const isPotentialHeader = !/[:.]/.test(trimmedLine);
-        if (isPotentialHeader && TOPPING_CATEGORY_KEYWORDS.some(keyword => trimmedLine.includes(keyword))) {
-            isToppingCategory = true;
-        }
-        continue;
-      }
-
-      if (match) {
-        const itemName = match[1].trim();
-        const itemPrice = parseFloat(match[2]);
-        
-        if (isToppingCategory) {
-            const parsedToppings = parseToppings(itemName);
-            for (const toppingName of parsedToppings) {
-                if (!storeToppings.some(t => t.name === toppingName)) {
-                    storeToppings.push({ name: toppingName, price: itemPrice });
-                }
-            }
-        } else {
-            currentCategory.items.push({
-              id: idCounters.item++,
-              name: itemName,
-              price: itemPrice,
-            });
-        }
-      }
-    }
-    
-    const validMenu = menu.filter(c => (c.name !== '' || c.items.length > 0) && c.items.length > 0);
-    if (validMenu.length > 0 || storeToppings.length > 0) {
-      stores.push({
-        id: idCounters.store++,
-        name: storeName,
-        type: type,
-        menu: validMenu,
-        toppings: storeToppings,
-      });
-    }
-  }
-  return stores;
-};
 
 const updateSession = async (data: Partial<SessionData>) => {
     const sessionRef = doc(db, 'sessions', SESSION_ID);
@@ -536,6 +430,7 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans">
+      <FirebaseConnectionStatus />
       <header className="bg-white shadow-sm">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
