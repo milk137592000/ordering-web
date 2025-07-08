@@ -50,20 +50,47 @@ const LoadingApp: React.FC = () => {
         setProgress(75);
 
         // 動態載入 App 組件
+        console.log('🔄 開始載入 App 組件...');
         const { default: App } = await import('./App');
         console.log('✅ App 組件載入成功');
+
+        setStatus('正在渲染應用...');
+        setProgress(90);
+
+        // 測試 App 組件是否可以正常創建
+        console.log('🧪 測試 App 組件...');
+        const testElement = React.createElement(App);
+        console.log('✅ App 組件創建成功:', testElement);
 
         setStatus('載入完成');
         setProgress(100);
 
         // 渲染主應用
         setTimeout(() => {
-          root.render(
-            <React.StrictMode>
-              <App />
-            </React.StrictMode>
-          );
-          console.log('✅ 主應用渲染完成');
+          try {
+            console.log('🎨 開始渲染主應用...');
+            root.render(
+              <React.StrictMode>
+                <App />
+              </React.StrictMode>
+            );
+            console.log('✅ 主應用渲染完成');
+
+            // 檢查渲染是否成功
+            setTimeout(() => {
+              const appElement = document.querySelector('#root > div');
+              if (appElement) {
+                console.log('✅ 應用渲染驗證成功');
+              } else {
+                console.error('❌ 應用渲染後沒有找到內容');
+                throw new Error('應用渲染後沒有內容');
+              }
+            }, 1000);
+
+          } catch (renderError) {
+            console.error('❌ 主應用渲染失敗:', renderError);
+            throw renderError;
+          }
         }, 500);
 
       } catch (error) {

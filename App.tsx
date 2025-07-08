@@ -8,7 +8,27 @@ import HistoryDisplay from './components/HistoryDisplay';
 import HistoricalOrderDetail from './components/HistoricalOrderDetail';
 import FirebaseConnectionStatus from './components/FirebaseConnectionStatus';
 import { LogoIcon, RefreshIcon, HistoryIcon } from './components/icons';
-import { db, doc, onSnapshot, setDoc, getDoc } from './firebase';
+// 延遲導入 Firebase 服務，避免初始化時阻塞
+let firebaseServices: any = null;
+const getFirebaseServices = () => {
+  if (!firebaseServices) {
+    try {
+      firebaseServices = require('./firebase');
+      console.log('✅ Firebase 服務載入成功');
+    } catch (error) {
+      console.error('❌ Firebase 服務載入失敗:', error);
+      // 返回模擬服務
+      firebaseServices = {
+        db: null,
+        doc: () => ({}),
+        onSnapshot: () => () => {},
+        setDoc: () => Promise.resolve(),
+        getDoc: () => Promise.resolve({ exists: () => false, data: () => null })
+      };
+    }
+  }
+  return firebaseServices;
+};
 import Button from './components/common/Button';
 import { parseStoresFromMarkdown } from './src/utils/parseStores';
 
@@ -23,11 +43,22 @@ enum ViewMode {
 
 
 const updateSession = async (data: Partial<SessionData>) => {
-    const sessionRef = doc(db, 'sessions', SESSION_ID);
-    await setDoc(sessionRef, data, { merge: true });
+    try {
+      const { db, doc, setDoc } = getFirebaseServices();
+      if (db) {
+        const sessionRef = doc(db, 'sessions', SESSION_ID);
+        await setDoc(sessionRef, data, { merge: true });
+      } else {
+        console.warn('⚠️ Firebase 不可用，跳過會話更新');
+      }
+    } catch (error) {
+      console.error('❌ 更新會話失敗:', error);
+    }
 };
 
 const App: React.FC = () => {
+  console.log('🎨 App 組件開始渲染');
+
   const [sessionData, setSessionData] = useState<SessionData | null>(null);
   const [restaurants, setRestaurants] = useState<Store[]>([]);
   const [drinkShops, setDrinkShops] = useState<Store[]>([]);
@@ -36,6 +67,14 @@ const App: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>(ViewMode.ORDERING);
   const [selectedHistoricalOrder, setSelectedHistoricalOrder] = useState<HistoricalOrder | null>(null);
+
+  // 簡單的渲染測試
+  const [renderTest, setRenderTest] = useState(false);
+
+  useEffect(() => {
+    console.log('🔄 App 組件 useEffect 執行');
+    setRenderTest(true);
+  }, []);
 
   // Fetch static menu data once on component mount
   useEffect(() => {
@@ -427,6 +466,25 @@ const App: React.FC = () => {
         );
     }
   };
+
+  // 測試模式：如果還沒有完全載入，顯示簡化版本
+  if (!renderTest) {
+    console.log('🧪 App 組件測試模式');
+    return (
+      <div style={{
+        padding: '20px',
+        textAlign: 'center',
+        fontFamily: 'Arial, sans-serif',
+        backgroundColor: '#f0f0f0',
+        minHeight: '100vh'
+      }}>
+        <h1>🍜 丁二烯C班點餐系統</h1>
+        <p>App 組件載入中...</p>
+      </div>
+    );
+  }
+
+  console.log('🎨 App 組件完整渲染');
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans">
