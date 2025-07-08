@@ -164,18 +164,23 @@ const getFirebaseServices = (): FirebaseServices => {
   return services;
 };
 
-// 延遲獲取服務，確保初始化完成
-let cachedServices: FirebaseServices | null = null;
+// 直接獲取服務，簡化邏輯
 const getServices = (): FirebaseServices => {
-  if (!cachedServices) {
-    cachedServices = getFirebaseServices();
+  const services = (window as any).firebaseServices as FirebaseServices;
+  if (services && services.db) {
+    return services;
   }
-  // 每次都檢查是否有更新的服務
-  const currentServices = (window as any).firebaseServices as FirebaseServices;
-  if (currentServices && currentServices.db && (!cachedServices.db || cachedServices.db === null)) {
-    cachedServices = currentServices;
-  }
-  return cachedServices;
+  // 如果服務不可用，返回模擬服務
+  return {
+    db: null,
+    doc: () => ({}),
+    setDoc: () => Promise.reject("Firebase not ready"),
+    onSnapshot: () => {
+      console.error("onSnapshot failed: Firebase not ready");
+      return () => {};
+    },
+    getDoc: () => Promise.reject("Firebase not ready")
+  };
 };
 
 // 包裝 Firebase 服務以添加重試和超時功能
@@ -220,18 +225,9 @@ const wrappedOnSnapshot = (...args: any[]): (() => void) => {
   return currentServices.onSnapshot(docRef, enhancedCallback, enhancedErrorCallback);
 };
 
-// 動態導出，確保總是獲取最新的服務
-export const db = new Proxy({} as any, {
-  get(target, prop) {
-    const currentServices = getServices();
-    return currentServices.db?.[prop];
-  }
-});
-
-export const doc = (...args: any[]) => {
-  const currentServices = getServices();
-  return currentServices.doc(...args);
-};
+// 直接導出服務
+const services = getServices();
+export const { db, doc } = services;
 export const setDoc = wrappedSetDoc;
 export const getDoc = wrappedGetDoc;
 export const onSnapshot = wrappedOnSnapshot;
