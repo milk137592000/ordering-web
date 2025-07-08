@@ -12,6 +12,17 @@ export default defineConfig(({ mode }) => {
         alias: {
           '@': path.resolve(__dirname, '.'),
         }
-      }
+      },
+      build: {
+        target: 'es2022', // 支持 top-level await
+        rollupOptions: {
+          output: {
+            manualChunks: undefined,
+          },
+        },
+      },
+      esbuild: {
+        target: 'es2022', // 確保 esbuild 也使用正確的目標
+      },
     };
 });

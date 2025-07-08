@@ -35,9 +35,7 @@
     "firebase-tools": "^13.0.0",
     "@firebase/rules-unit-testing": "^3.0.0",
     "concurrently": "^8.2.0",
-    "wait-on": "^7.2.0"
-  },
-  "devDependencies": {
+    "wait-on": "^7.2.0",
     "@axe-core/playwright": "^4.10.2",
     "@babel/preset-env": "^7.28.0",
     "@babel/preset-react": "^7.27.1",

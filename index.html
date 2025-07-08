@@ -31,24 +31,29 @@
       import { initializeFirebaseServices } from "/firebase-emulator.js";
 
       // 初始化 Firebase 服務（自動檢測模擬器）
-      try {
-        const services = await initializeFirebaseServices();
-        window.firebaseServices = services;
-        console.log('🔥 Firebase 服務初始化完成');
-      } catch (error) {
-        console.error("Firebase 初始化失敗:", error);
-        // 如果 Firebase 初始化失敗，建立一個模擬物件以防止應用程式崩潰
-        window.firebaseServices = {
-          db: null,
-          doc: () => {},
-          setDoc: () => Promise.reject("Firebase not initialized"),
-          onSnapshot: () => {
-            console.error("onSnapshot failed: Firebase not initialized");
-            return () => {}; // 返回一個假的取消訂閱函式
-          },
-          getDoc: () => Promise.reject("Firebase not initialized")
-        };
+      async function initializeFirebase() {
+        try {
+          const services = await initializeFirebaseServices();
+          window.firebaseServices = services;
+          console.log('🔥 Firebase 服務初始化完成');
+        } catch (error) {
+          console.error("Firebase 初始化失敗:", error);
+          // 如果 Firebase 初始化失敗，建立一個模擬物件以防止應用程式崩潰
+          window.firebaseServices = {
+            db: null,
+            doc: () => {},
+            setDoc: () => Promise.reject("Firebase not initialized"),
+            onSnapshot: () => {
+              console.error("onSnapshot failed: Firebase not initialized");
+              return () => {}; // 返回一個假的取消訂閱函式
+            },
+            getDoc: () => Promise.reject("Firebase not initialized")
+          };
+        }
       }
+
+      // 立即執行初始化
+      initializeFirebase();
     </script>
     
     <script type="module" src="/index.tsx"></script>
