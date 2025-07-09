@@ -22,6 +22,33 @@ const FirebaseConnectionStatus: React.FC = () => {
     return null;
   }
 
+  // 如果是離線模式，顯示友好的離線通知
+  if (!connectionState.isConnected && connectionState.lastError?.includes('離線模式')) {
+    return (
+      <div className="fixed bottom-4 right-4 z-50 bg-blue-50 border border-blue-200 rounded-lg p-4 shadow-lg max-w-sm">
+        <div className="flex items-center space-x-3">
+          <span className="text-2xl">📱</span>
+          <div>
+            <h3 className="font-semibold text-blue-800">離線模式</h3>
+            <p className="text-sm text-blue-600">系統正常運行，數據保存在本地</p>
+          </div>
+        </div>
+
+        <div className="mt-3 text-xs text-blue-700">
+          <p>✅ 所有功能正常使用</p>
+          <p>🔄 網路恢復後會自動同步</p>
+        </div>
+
+        <button
+          onClick={() => window.location.reload()}
+          className="mt-3 w-full bg-blue-500 text-white py-2 px-4 rounded text-sm hover:bg-blue-600 transition-colors"
+        >
+          重新連接
+        </button>
+      </div>
+    );
+  }
+
   const getStatusColor = () => {
     if (connectionState.isConnected) return 'text-green-600 bg-green-50 border-green-200';
     if (connectionState.retryCount > 0) return 'text-yellow-600 bg-yellow-50 border-yellow-200';

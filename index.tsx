@@ -42,8 +42,8 @@ const LoadingApp: React.FC = () => {
         }
 
         if (retries >= maxRetries) {
-          console.warn('⚠️ Firebase 初始化超時，使用降級模式');
-          setStatus('Firebase 連接超時，使用離線模式');
+          console.log('ℹ️ Firebase 初始化超時，使用離線模式');
+          setStatus('使用離線模式');
         }
 
         setStatus('正在載入主應用...');
