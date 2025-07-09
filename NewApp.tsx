@@ -1,21 +1,21 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { AppPhase, UserRole, UserSession, SessionData, Store, OrderItem, HistoricalOrder } from './types';
-import IdentitySelection from './components/IdentitySelection';
-import SetupInterface from './components/SetupInterface';
-import AdminOrderingInterface from './components/AdminOrderingInterface';
-import RestaurantOrderingInterface from './components/RestaurantOrderingInterface';
-import DrinkOrderingInterface from './components/DrinkOrderingInterface';
-import RestaurantOrdering from './components/RestaurantOrdering';
-import DrinkOrdering from './components/DrinkOrdering';
-import PersonalOrderSummary from './components/PersonalOrderSummary';
-import HistoryDisplay from './components/HistoryDisplay';
-import HistoricalOrderDetail from './components/HistoricalOrderDetail';
-import FirebaseConnectionStatus from './components/FirebaseConnectionStatus';
-import { LogoIcon, RefreshIcon, HistoryIcon } from './components/icons';
-import * as firebaseServices from './firebase';
-import Button from './components/common/Button';
-import { parseStoresFromMarkdown } from './src/utils/parseStores';
-import { loadTeamMembers } from '@/src/utils/teamMembers';
+import IdentitySelection from './components/IdentitySelection.tsx';
+import SetupInterface from './components/SetupInterface.tsx';
+import AdminOrderingInterface from './components/AdminOrderingInterface.tsx';
+import RestaurantOrderingInterface from './components/RestaurantOrderingInterface.tsx';
+import DrinkOrderingInterface from './components/DrinkOrderingInterface.tsx';
+import RestaurantOrdering from './components/RestaurantOrdering.tsx';
+import DrinkOrdering from './components/DrinkOrdering.tsx';
+import PersonalOrderSummary from './components/PersonalOrderSummary.tsx';
+import HistoryDisplay from './components/HistoryDisplay.tsx';
+import HistoricalOrderDetail from './components/HistoricalOrderDetail.tsx';
+import FirebaseConnectionStatus from './components/FirebaseConnectionStatus.tsx';
+import { LogoIcon, RefreshIcon, HistoryIcon } from './components/icons.tsx';
+import * as firebaseServices from './firebase.ts';
+import Button from './components/common/Button.tsx';
+import { parseStoresFromMarkdown } from './src/utils/parseStores.ts';
+import { loadTeamMembers } from '@/src/utils/teamMembers.ts';
 
 enum ViewMode {
   ORDERING = 'ordering',

@@ -1,22 +1,22 @@
 
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
-import { AppPhase, UserRole, UserSession, SessionData, Store, OrderItem, HistoricalOrder, TeamMember } from './types';
-import IdentitySelection from './components/IdentitySelection';
-import SetupInterface from './components/SetupInterface';
-import StoreSelector from './components/StoreSelector';
-import OrderingInterface from './components/OrderingInterface';
-import RestaurantOrdering from './components/RestaurantOrdering';
-import DrinkOrdering from './components/DrinkOrdering';
-import PersonalOrderSummary from './components/PersonalOrderSummary';
-import HistoryDisplay from './components/HistoryDisplay';
-import HistoricalOrderDetail from './components/HistoricalOrderDetail';
-import FirebaseConnectionStatus from './components/FirebaseConnectionStatus';
-import { LogoIcon, RefreshIcon, HistoryIcon } from './components/icons';
+import { AppPhase, UserRole, UserSession, SessionData, Store, OrderItem, HistoricalOrder, TeamMember } from './types.ts';
+import IdentitySelection from './components/IdentitySelection.tsx';
+import SetupInterface from './components/SetupInterface.tsx';
+import StoreSelector from './components/StoreSelector.tsx';
+import OrderingInterface from './components/OrderingInterface.tsx';
+import RestaurantOrdering from './components/RestaurantOrdering.tsx';
+import DrinkOrdering from './components/DrinkOrdering.tsx';
+import PersonalOrderSummary from './components/PersonalOrderSummary.tsx';
+import HistoryDisplay from './components/HistoryDisplay.tsx';
+import HistoricalOrderDetail from './components/HistoricalOrderDetail.tsx';
+import FirebaseConnectionStatus from './components/FirebaseConnectionStatus.tsx';
+import { LogoIcon, RefreshIcon, HistoryIcon } from './components/icons.tsx';
 // 導入 Firebase 服務
-import * as firebaseServices from './firebase';
-import Button from './components/common/Button';
-import { parseStoresFromMarkdown } from './src/utils/parseStores';
-import { loadTeamMembers } from '@/src/utils/teamMembers';
+import * as firebaseServices from './firebase.ts';
+import Button from './components/common/Button.tsx';
+import { parseStoresFromMarkdown } from './src/utils/parseStores.ts';
+import { loadTeamMembers } from '@/src/utils/teamMembers.ts';
 
 const SESSION_ID = 'active_session'; // Using a single document for the current session
 
