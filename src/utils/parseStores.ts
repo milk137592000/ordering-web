@@ -59,16 +59,24 @@ export const parseStoresFromMarkdown = (
         // Start new category
         const categoryName = line.replace(/^##\s*/, '').trim();
         currentCategory = { name: categoryName, items: [] };
-      } else if (line.startsWith('-') || line.match(/^[^#\s].+\s+\d+/)) {
-        // Parse menu item - handle both formats: "- item .......... $price" and "item .......... price"
-        let match = line.match(/^-\s*(.+?)\s*\$(\d+(?:\.\d+)?)/);
+      } else if (line.startsWith('-') || line.match(/^[^#\s].+\s+[\$\d]/)) {
+        // Parse menu item - handle multiple formats
+        let match = null;
 
-        // If no match with dash, try without dash (for drinks.md format)
+        // Format 1: "- item .......... $price"
+        match = line.match(/^-\s*(.+?)\s*\.+\s*\$(\d+(?:\.\d+)?)/);
+
+        // Format 2: "- item $price" (without dots)
+        if (!match) {
+          match = line.match(/^-\s*(.+?)\s*\$(\d+(?:\.\d+)?)/);
+        }
+
+        // Format 3: "item .......... price" (drinks.md format, no $ symbol)
         if (!match) {
           match = line.match(/^(.+?)\s*\.+\s*(\d+(?:\.\d+)?)$/);
         }
 
-        // Also try format without dots
+        // Format 4: "item price" (without dots or $)
         if (!match) {
           match = line.match(/^(.+?)\s+(\d+(?:\.\d+)?)$/);
         }
@@ -119,4 +127,60 @@ export const parseStoresFromMarkdown = (
     }
   }
   return stores;
+};
+
+export const loadStoresData = async (): Promise<Store[]> => {
+  try {
+    console.log('開始載入餐廳數據...');
+
+    // 首先嘗試載入 JSON 文件
+    try {
+      const jsonResponse = await fetch('/restaurants.json');
+      console.log('restaurants.json 請求狀態:', jsonResponse.status, jsonResponse.ok);
+
+      if (jsonResponse.ok) {
+        const data = await jsonResponse.json();
+        console.log('restaurants.json 內容:', data);
+
+        if (data.stores && Array.isArray(data.stores)) {
+          console.log('成功載入 JSON 餐廳數據:', data.stores.length, '家店');
+          return data.stores;
+        }
+      }
+    } catch (jsonError) {
+      console.warn('JSON 載入失敗:', jsonError);
+    }
+
+    // 如果 JSON 失敗，嘗試載入 MD 文件
+    console.log('JSON 載入失敗，嘗試載入 restaurants.md...');
+    const response = await fetch('/restaurants.md');
+    console.log('restaurants.md 請求狀態:', response.status, response.ok);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const text = await response.text();
+    console.log('restaurants.md 內容長度:', text.length);
+
+    const stores = parseStores(text);
+    console.log('成功解析 MD 餐廳數據:', stores.length, '家店');
+    return stores;
+
+  } catch (error) {
+    console.error('Failed to load restaurant data:', error);
+    console.log('使用預設餐廳數據');
+
+    // 返回預設數據
+    return [
+      {
+        id: 'default-1',
+        name: '預設餐廳',
+        type: 'restaurant',
+        items: [
+          { id: 'default-item-1', name: '預設餐點', price: 100 }
+        ]
+      }
+    ];
+  }
 };

@@ -1,0 +1,52 @@
+{
+  "stores": [
+    {
+      "id": "store-1",
+      "name": "麥當勞",
+      "type": "restaurant",
+      "items": [
+        { "id": "item-1", "name": "大麥克", "price": 75 },
+        { "id": "item-2", "name": "薯條(大)", "price": 55 },
+        { "id": "item-3", "name": "可樂(大)", "price": 35 },
+        { "id": "item-4", "name": "麥克雞塊(10塊)", "price": 85 },
+        { "id": "item-5", "name": "魚香堡", "price": 65 }
+      ]
+    },
+    {
+      "id": "store-2", 
+      "name": "肯德基",
+      "type": "restaurant",
+      "items": [
+        { "id": "item-6", "name": "原味雞腿", "price": 70 },
+        { "id": "item-7", "name": "薯條", "price": 45 },
+        { "id": "item-8", "name": "可樂", "price": 30 },
+        { "id": "item-9", "name": "雞米花", "price": 60 },
+        { "id": "item-10", "name": "蛋撻", "price": 25 }
+      ]
+    },
+    {
+      "id": "store-3",
+      "name": "星巴克", 
+      "type": "drink",
+      "items": [
+        { "id": "item-11", "name": "美式咖啡", "price": 110 },
+        { "id": "item-12", "name": "拿鐵", "price": 140 },
+        { "id": "item-13", "name": "卡布奇諾", "price": 130 },
+        { "id": "item-14", "name": "焦糖瑪奇朵", "price": 160 },
+        { "id": "item-15", "name": "抹茶拿鐵", "price": 150 }
+      ]
+    },
+    {
+      "id": "store-4",
+      "name": "50嵐",
+      "type": "drink", 
+      "items": [
+        { "id": "item-16", "name": "珍珠奶茶", "price": 55 },
+        { "id": "item-17", "name": "檸檬綠茶", "price": 35 },
+        { "id": "item-18", "name": "冬瓜檸檬", "price": 40 },
+        { "id": "item-19", "name": "紅茶拿鐵", "price": 50 },
+        { "id": "item-20", "name": "布丁奶茶", "price": 60 }
+      ]
+    }
+  ]
+}

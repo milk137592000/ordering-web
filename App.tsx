@@ -15,7 +15,7 @@ import { LogoIcon, RefreshIcon, HistoryIcon } from './components/icons.tsx';
 // 導入 Firebase 服務
 import * as firebaseServices from './firebase.ts';
 import Button from './components/common/Button.tsx';
-import { parseStoresFromMarkdown } from './src/utils/parseStores.ts';
+import { parseStoresFromMarkdown, loadStoresData } from './src/utils/parseStores.ts';
 import { loadTeamMembers } from '@/src/utils/teamMembers.ts';
 
 const SESSION_ID = 'active_session'; // Using a single document for the current session
