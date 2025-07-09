@@ -3,6 +3,54 @@
  * 用於測試環境中自動連接到 Firebase 模擬器
  */
 
+// 連接狀態管理
+interface ConnectionState {
+  isConnected: boolean;
+  lastError: string | null;
+  retryCount: number;
+  lastSuccessfulOperation: number;
+}
+
+let connectionState: ConnectionState = {
+  isConnected: false,
+  lastError: null,
+  retryCount: 0,
+  lastSuccessfulOperation: Date.now()
+};
+
+// 連接狀態監聽器
+const connectionListeners: ((state: ConnectionState) => void)[] = [];
+
+// 添加連接狀態監聽器
+export const addConnectionListener = (listener: (state: ConnectionState) => void) => {
+  connectionListeners.push(listener);
+  return () => {
+    const index = connectionListeners.indexOf(listener);
+    if (index > -1) {
+      connectionListeners.splice(index, 1);
+    }
+  };
+};
+
+// 通知連接狀態變更
+const notifyConnectionChange = () => {
+  connectionListeners.forEach(listener => listener({ ...connectionState }));
+};
+
+// 更新連接狀態
+const updateConnectionState = (isConnected: boolean, error: string | null) => {
+  connectionState.isConnected = isConnected;
+  connectionState.lastError = error;
+  if (isConnected) {
+    connectionState.retryCount = 0;
+    connectionState.lastSuccessfulOperation = Date.now();
+  }
+  notifyConnectionChange();
+};
+
+// 獲取連接狀態
+export const getConnectionState = () => ({ ...connectionState });
+
 // 模擬器配置
 export const EMULATOR_CONFIG = {
   firestore: {
@@ -67,16 +115,16 @@ export const getFirebaseConfig = async () => {
 // 初始化 Firebase 服務（支持模擬器）
 export const initializeFirebaseServices = async () => {
   const config = await getFirebaseConfig();
-  
+
   try {
     // 動態導入 Firebase 模組
     const { initializeApp } = await import("https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js");
-    const { getFirestore, connectFirestoreEmulator, doc, setDoc, onSnapshot, getDoc } = 
+    const { getFirestore, connectFirestoreEmulator, doc, setDoc, onSnapshot, getDoc } =
       await import("https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js");
 
     const app = initializeApp(config);
     const db = getFirestore(app);
-    
+
     // 如果使用模擬器，連接到模擬器
     if (config.useEmulator) {
       try {
@@ -92,23 +140,33 @@ export const initializeFirebaseServices = async () => {
       try {
         // 嘗試讀取一個測試文檔來驗證連接
         const testDoc = doc(db, 'test', 'connection');
-        await getDoc(testDoc);
+        await Promise.race([
+          getDoc(testDoc),
+          new Promise((_, reject) =>
+            setTimeout(() => reject(new Error('連接超時')), 10000)
+          )
+        ]);
         console.log('✅ Firestore 連接測試成功');
+        updateConnectionState(true, null);
       } catch (error) {
-        console.error('❌ Firestore 連接測試失敗:', error);
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        console.error('❌ Firestore 連接測試失敗:', errorMessage);
+        updateConnectionState(false, `連接失敗: ${errorMessage}`);
         // 不拋出錯誤，讓應用繼續運行
       }
     }
-    
+
     return { db, doc, setDoc, onSnapshot, getDoc };
   } catch (error) {
-    console.error("Firebase 初始化失敗:", error);
-    
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error("Firebase 初始化失敗:", errorMessage);
+    updateConnectionState(false, `初始化失敗: ${errorMessage}`);
+
     // 返回模擬服務以防止應用程式崩潰
     return {
-      db: null, 
-      doc: () => {}, 
-      setDoc: () => Promise.reject("Firebase not initialized"), 
+      db: null,
+      doc: () => {},
+      setDoc: () => Promise.reject("Firebase not initialized"),
       onSnapshot: () => {
         console.error("onSnapshot failed: Firebase not initialized");
         return () => {};

@@ -37,7 +37,7 @@ const FirebaseConnectionStatus: React.FC = () => {
   const getStatusText = () => {
     if (connectionState.isConnected) return '連接正常';
     if (connectionState.retryCount > 0) return `重新連接中... (${connectionState.retryCount}/3)`;
-    return '連接失敗';
+    return '離線模式';
   };
 
   const formatLastSuccess = () => {
@@ -87,12 +87,19 @@ const FirebaseConnectionStatus: React.FC = () => {
           
           {!connectionState.isConnected && (
             <div className="mt-2 p-2 bg-white bg-opacity-50 rounded text-xs">
-              <strong>建議:</strong>
+              <strong>離線模式說明:</strong>
               <ul className="list-disc list-inside mt-1 space-y-1">
-                <li>檢查網路連接</li>
-                <li>重新整理頁面</li>
-                <li>稍後再試</li>
+                <li>系統將使用本地儲存</li>
+                <li>功能可能受限但基本操作正常</li>
+                <li>網路恢復後會自動同步</li>
               </ul>
+              <div className="mt-2 pt-2 border-t border-current border-opacity-20">
+                <strong>如需完整功能:</strong>
+                <ul className="list-disc list-inside mt-1 space-y-1">
+                  <li>檢查網路連接</li>
+                  <li>重新整理頁面</li>
+                </ul>
+              </div>
             </div>
           )}
         </div>
