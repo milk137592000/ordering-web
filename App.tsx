@@ -16,7 +16,7 @@ import { LogoIcon, RefreshIcon, HistoryIcon } from './components/icons';
 import * as firebaseServices from './firebase';
 import Button from './components/common/Button';
 import { parseStoresFromMarkdown } from './src/utils/parseStores';
-import { loadTeamMembers } from './src/utils/teamMembers';
+import { loadTeamMembers } from '@/src/utils/teamMembers';
 
 const SESSION_ID = 'active_session'; // Using a single document for the current session
 

@@ -3,7 +3,7 @@ import { UserRole, TeamMember } from '../types';
 import Button from './common/Button';
 import Card from './common/Card';
 import { UserIcon, PlusIcon } from './icons';
-import { loadTeamMembers } from '../src/utils/teamMembers';
+import { loadTeamMembers } from '@/src/utils/teamMembers';
 
 interface IdentitySelectionProps {
   onSelectRole: (role: UserRole, userName: string, orderId?: string) => void;

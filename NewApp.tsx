@@ -15,7 +15,7 @@ import { LogoIcon, RefreshIcon, HistoryIcon } from './components/icons';
 import * as firebaseServices from './firebase';
 import Button from './components/common/Button';
 import { parseStoresFromMarkdown } from './src/utils/parseStores';
-import { loadTeamMembers } from './src/utils/teamMembers';
+import { loadTeamMembers } from '@/src/utils/teamMembers';
 
 enum ViewMode {
   ORDERING = 'ordering',

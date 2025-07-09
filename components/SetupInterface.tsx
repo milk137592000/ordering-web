@@ -3,7 +3,7 @@ import { Store, TeamMember } from '../types';
 import Button from './common/Button';
 import Card from './common/Card';
 import { ClockIcon, StoreIcon, ShuffleIcon } from './icons';
-import { loadTeamMembers } from '../src/utils/teamMembers';
+import { loadTeamMembers } from '@/src/utils/teamMembers';
 
 interface SetupInterfaceProps {
   restaurants: Store[];
