@@ -9,8 +9,11 @@ const mockDoc = jest.fn();
 
 jest.mock('../../../firebase', () => ({
   db: {},
-  doc: mockDoc,
-  getDoc: mockGetDoc,
+  doc: jest.fn(),
+  getDoc: jest.fn(),
+  collection: jest.fn(),
+  query: jest.fn(),
+  getDocs: jest.fn(),
 }));
 
 describe('HistoryDisplay', () => {

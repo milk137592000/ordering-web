@@ -14,10 +14,16 @@ import {
 describe('Type definitions', () => {
   describe('AppPhase enum', () => {
     it('should have correct phase values', () => {
-      expect(AppPhase.RESTAURANT_SELECTION).toBe(0);
-      expect(AppPhase.DRINK_SHOP_SELECTION).toBe(1);
-      expect(AppPhase.ORDERING).toBe(2);
-      expect(AppPhase.SUMMARY).toBe(3);
+      expect(AppPhase.IDENTITY_SELECTION).toBe(0);
+      expect(AppPhase.SETUP).toBe(1);
+      expect(AppPhase.RESTAURANT_SELECTION).toBe(2);
+      expect(AppPhase.DRINK_SHOP_SELECTION).toBe(3);
+      expect(AppPhase.ORDERING).toBe(4);
+      expect(AppPhase.RESTAURANT_ORDERING).toBe(5);
+      expect(AppPhase.DRINK_ORDERING).toBe(6);
+      expect(AppPhase.PERSONAL_SUMMARY).toBe(7);
+      expect(AppPhase.SUMMARY).toBe(8);
+      expect(AppPhase.ADMIN_MANAGEMENT).toBe(9);
     });
   });
 

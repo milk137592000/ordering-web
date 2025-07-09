@@ -50,9 +50,9 @@ const LoadingApp: React.FC = () => {
         setProgress(75);
 
         // 動態載入 App 組件
-        console.log('🔄 開始載入 App 組件...');
-        const { default: App } = await import('./App');
-        console.log('✅ App 組件載入成功');
+        console.log('🔄 開始載入 NewApp 組件...');
+        const { default: App } = await import('./NewApp');
+        console.log('✅ NewApp 組件載入成功');
 
         setStatus('正在渲染應用...');
         setProgress(90);

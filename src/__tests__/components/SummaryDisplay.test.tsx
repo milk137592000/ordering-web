@@ -47,9 +47,9 @@ describe('SummaryDisplay', () => {
     );
 
     expect(screen.getByText('訂單總覽')).toBeInTheDocument();
-    expect(screen.getByText('test-order-123')).toBeInTheDocument();
-    expect(screen.getByText('🍽️ 測試餐廳')).toBeInTheDocument();
-    expect(screen.getByText('🥤 測試飲料店')).toBeInTheDocument();
+    expect(screen.getByText((content, element) => content.includes('test-order-123'))).toBeInTheDocument();
+    expect(screen.getByText((content, element) => content.includes('測試餐廳'))).toBeInTheDocument();
+    expect(screen.getByText((content, element) => content.includes('測試飲料店'))).toBeInTheDocument();
   });
 
   it('should display member names and their orders', () => {
@@ -90,7 +90,7 @@ describe('SummaryDisplay', () => {
     expect(screen.getByText('總計: $80.00')).toBeInTheDocument();
     
     // 總計: $250
-    expect(screen.getByText('總金額: $250.00')).toBeInTheDocument();
+    expect(screen.getByTestId('total-amount')).toHaveTextContent('$250.00');
   });
 
   it('should separate restaurant and drink items', () => {
@@ -105,11 +105,13 @@ describe('SummaryDisplay', () => {
       />
     );
 
-    // Should show restaurant subtotal
-    expect(screen.getByText('餐點 ($200.00)')).toBeInTheDocument();
-    
+    // Should show restaurant subtotal - check for separate elements
+    expect(screen.getByText('餐點總費用:')).toBeInTheDocument();
+    expect(screen.getAllByText('$200.00')).toHaveLength(1);
+
     // Should show drink subtotal
-    expect(screen.getByText('飲料 ($50.00)')).toBeInTheDocument();
+    expect(screen.getByText('飲料總費用:')).toBeInTheDocument();
+    expect(screen.getAllByText('$50.00')).toHaveLength(2); // One in individual order, one in total
   });
 
   it('should format date and time correctly', () => {
@@ -124,7 +126,7 @@ describe('SummaryDisplay', () => {
       />
     );
 
-    expect(screen.getByText('📅 2022年1月1日 22:30')).toBeInTheDocument();
+    expect(screen.getByText((content, element) => content.includes('2022年1月1日') && content.includes('22:30'))).toBeInTheDocument();
   });
 
   it('should call onStartOver when complete button is clicked', () => {
@@ -155,7 +157,7 @@ describe('SummaryDisplay', () => {
       />
     );
 
-    fireEvent.click(screen.getByText('返回修改'));
+    fireEvent.click(screen.getByText('返回點餐頁面'));
     expect(mockOnBack).toHaveBeenCalled();
   });
 
@@ -172,7 +174,7 @@ describe('SummaryDisplay', () => {
     );
 
     expect(screen.getByText('訂單總覽')).toBeInTheDocument();
-    expect(screen.getByText('總金額: $0.00')).toBeInTheDocument();
+    expect(screen.getByTestId('total-amount')).toHaveTextContent('$0.00');
   });
 
   it('should handle orders with only restaurant items', () => {

@@ -76,7 +76,8 @@ const SummaryDisplay: React.FC<SummaryDisplayProps> = ({
     const date = new Date(dateString);
     return date.toLocaleTimeString('zh-TW', {
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
+      hour12: false
     });
   };
 

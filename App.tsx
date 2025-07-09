@@ -1,9 +1,13 @@
 
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
-import { AppPhase, TeamMember, Store, MemberOrder, OrderItem, MenuCategory, SessionData, Topping, HistoricalOrder } from './types';
+import { AppPhase, UserRole, UserSession, SessionData, Store, OrderItem, HistoricalOrder, TeamMember } from './types';
+import IdentitySelection from './components/IdentitySelection';
+import SetupInterface from './components/SetupInterface';
 import StoreSelector from './components/StoreSelector';
 import OrderingInterface from './components/OrderingInterface';
-import SummaryDisplay from './components/SummaryDisplay';
+import RestaurantOrdering from './components/RestaurantOrdering';
+import DrinkOrdering from './components/DrinkOrdering';
+import PersonalOrderSummary from './components/PersonalOrderSummary';
 import HistoryDisplay from './components/HistoryDisplay';
 import HistoricalOrderDetail from './components/HistoricalOrderDetail';
 import FirebaseConnectionStatus from './components/FirebaseConnectionStatus';
@@ -40,9 +44,14 @@ const updateSession = async (data: Partial<SessionData>) => {
 const App: React.FC = () => {
   console.log('🎨 App 組件開始渲染');
 
+  // 用戶會話狀態
+  const [userSession, setUserSession] = useState<UserSession | null>(null);
+  // 共享訂單狀態
   const [sessionData, setSessionData] = useState<SessionData | null>(null);
+  // 店家數據
   const [restaurants, setRestaurants] = useState<Store[]>([]);
   const [drinkShops, setDrinkShops] = useState<Store[]>([]);
+  // 系統狀態
   const [isLoading, setIsLoading] = useState(true);
   const [isInitializing, setIsInitializing] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -164,16 +173,20 @@ const App: React.FC = () => {
         const orderId = `order_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
         const newSession: SessionData = {
-            phase: AppPhase.RESTAURANT_SELECTION,
+            phase: AppPhase.SETUP,
             teamMembers: parsedMembers,
             orders: parsedMembers.map(m => ({ memberId: m.id, items: [] })),
             selectedRestaurantId: null,
             selectedDrinkShopId: null,
             deadline: null,
             isDeadlineReached: false,
+            isOrderClosed: false,
+            adminId: 'admin-1',
+            adminName: '管理員',
             orderId: orderId,
             orderDate: now,
             createdAt: now,
+            memberOrders: {}
         };
         const { db: firebaseDb, doc, setDoc } = firebaseServices;
         if (firebaseDb) {
@@ -186,6 +199,25 @@ const App: React.FC = () => {
     } finally {
         setIsInitializing(false);
     }
+  }, []);
+
+  const handleSetupComplete = useCallback((deadline: string, restaurantId: number | null, drinkShopId: number | null) => {
+    const now = new Date();
+    const [hours, minutes] = deadline.split(':');
+    const deadlineDate = new Date();
+    deadlineDate.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+
+    // 如果截止時間是明天
+    if (deadlineDate <= now) {
+      deadlineDate.setDate(deadlineDate.getDate() + 1);
+    }
+
+    updateSession({
+      deadline: deadlineDate.toISOString(),
+      selectedRestaurantId: restaurantId,
+      selectedDrinkShopId: drinkShopId,
+      phase: AppPhase.ORDERING
+    });
   }, []);
 
   const handleRestaurantSelect = useCallback((restaurant: Store) => {
@@ -383,6 +415,13 @@ const App: React.FC = () => {
     }
 
     switch (sessionData.phase) {
+      case AppPhase.SETUP:
+        return <SetupInterface
+                  restaurants={restaurants}
+                  drinkShops={drinkShops}
+                  onComplete={handleSetupComplete}
+                  orderId={sessionData.orderId}
+               />;
       case AppPhase.RESTAURANT_SELECTION:
         return <StoreSelector stores={restaurants} onSelect={handleRestaurantSelect} title="選擇一間餐廳" onSkip={handleSkipRestaurant} skipLabel="今天不用餐" />;
       case AppPhase.DRINK_SHOP_SELECTION:

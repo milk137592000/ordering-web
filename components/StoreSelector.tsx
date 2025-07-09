@@ -16,6 +16,10 @@ interface StoreSelectorProps {
 
 const StoreSelector: React.FC<StoreSelectorProps> = ({ stores, onSelect, title, onBack, onSkip, skipLabel }) => {
   const handleRandomSelect = useCallback(() => {
+    if (stores.length === 0) {
+      alert('沒有可選擇的店家');
+      return;
+    }
     const randomIndex = Math.floor(Math.random() * stores.length);
     onSelect(stores[randomIndex]);
   }, [stores, onSelect]);
@@ -40,7 +44,7 @@ const StoreSelector: React.FC<StoreSelectorProps> = ({ stores, onSelect, title, 
         </div>
 
       <div className="text-center mb-8 flex items-center justify-center flex-wrap gap-4">
-        <Button onClick={handleRandomSelect} size="large">
+        <Button onClick={handleRandomSelect} size="large" disabled={stores.length === 0}>
           <ShuffleIcon className="h-5 w-5 mr-2" />
           隨機選擇！
         </Button>
