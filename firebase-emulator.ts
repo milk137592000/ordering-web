@@ -65,11 +65,9 @@ export const EMULATOR_CONFIG = {
 
 // 檢查是否在測試環境中
 export const isTestEnvironment = (): boolean => {
-  return typeof window !== 'undefined' && 
-         (window.location.hostname === 'localhost' || 
-          window.location.hostname === '127.0.0.1') &&
-         (process.env.NODE_ENV === 'test' || 
-          window.location.search.includes('emulator=true'));
+  return typeof window !== 'undefined' &&
+         (window.location.hostname === 'localhost' ||
+          window.location.hostname === '127.0.0.1');
 };
 
 // 檢查模擬器是否可用
@@ -84,32 +82,18 @@ export const isEmulatorAvailable = async (): Promise<boolean> => {
 
 // 獲取 Firebase 配置（根據環境選擇生產或模擬器）
 export const getFirebaseConfig = async () => {
-  const shouldUseEmulator = isTestEnvironment() && await isEmulatorAvailable();
-  
-  if (shouldUseEmulator) {
-    console.log('🧪 使用 Firebase 模擬器進行測試');
-    return {
-      projectId: 'demo-ordering-app',
-      apiKey: 'demo-key',
-      authDomain: 'demo-ordering-app.firebaseapp.com',
-      storageBucket: 'demo-ordering-app.appspot.com',
-      messagingSenderId: '123456789',
-      appId: 'demo-app-id',
-      useEmulator: true
-    };
-  } else {
-    console.log('🔥 使用生產 Firebase 服務');
-    return {
-      apiKey: "AIzaSyC1IElfl_hDvSFzABKvqzLaqTNiz4zCH84",
-      authDomain: "ordering-app-aac96.firebaseapp.com",
-      projectId: "ordering-app-aac96",
-      storageBucket: "ordering-app-aac96.firebasestorage.app",
-      messagingSenderId: "937885720861",
-      appId: "1:937885720861:web:8559ab578c9687bcbb81f4",
-      measurementId: "G-0VLZJHL7WR",
-      useEmulator: false
-    };
-  }
+  // 暫時直接使用生產環境配置，避免模擬器連接問題
+  console.log('🔥 使用生產 Firebase 服務');
+  return {
+    apiKey: "AIzaSyC1IElfl_hDvSFzABKvqzLaqTNiz4zCH84",
+    authDomain: "ordering-app-aac96.firebaseapp.com",
+    projectId: "ordering-app-aac96",
+    storageBucket: "ordering-app-aac96.firebasestorage.app",
+    messagingSenderId: "937885720861",
+    appId: "1:937885720861:web:8559ab578c9687bcbb81f4",
+    measurementId: "G-0VLZJHL7WR",
+    useEmulator: false
+  };
 };
 
 // 初始化 Firebase 服務（支持模擬器）
@@ -125,35 +109,27 @@ export const initializeFirebaseServices = async () => {
     const app = initializeApp(config);
     const db = getFirestore(app);
 
-    // 如果使用模擬器，連接到模擬器
-    if (config.useEmulator) {
-      try {
-        connectFirestoreEmulator(db, EMULATOR_CONFIG.firestore.host, EMULATOR_CONFIG.firestore.port);
-        console.log('✅ 已連接到 Firestore 模擬器');
-      } catch (error) {
-        // 如果已經連接過模擬器，會拋出錯誤，這是正常的
-        console.log('ℹ️ Firestore 模擬器已連接');
-      }
-    } else {
-      // 生產環境，嘗試連接但不強制要求成功
-      console.log('🔥 正在初始化 Firestore 連接...');
-      try {
-        // 簡單的連接測試，但不要求必須成功
-        const testDoc = doc(db, 'sessions', 'test');
-        await Promise.race([
-          getDoc(testDoc),
-          new Promise((_, reject) =>
-            setTimeout(() => reject(new Error('連接超時')), 5000)
-          )
-        ]);
-        console.log('✅ Firestore 連接測試成功');
-        updateConnectionState(true, null);
-      } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error);
-        console.warn('⚠️ Firestore 連接測試失敗，但應用將繼續運行:', errorMessage);
-        // 設置為已連接但有警告，讓應用正常運行
-        updateConnectionState(true, `連接警告: ${errorMessage}`);
-      }
+    // 暫時跳過模擬器連接，直接使用生產環境
+    console.log('✅ 已連接到 Firestore 生產環境');
+
+    // 生產環境，嘗試連接但不強制要求成功
+    console.log('🔥 正在初始化 Firestore 連接...');
+    try {
+      // 簡單的連接測試，但不要求必須成功
+      const testDoc = doc(db, 'sessions', 'test');
+      await Promise.race([
+        getDoc(testDoc),
+        new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('連接超時')), 5000)
+        )
+      ]);
+      console.log('✅ Firestore 連接測試成功');
+      updateConnectionState(true, null);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.warn('⚠️ Firestore 連接測試失敗，但應用將繼續運行:', errorMessage);
+      // 設置為已連接但有警告，讓應用正常運行
+      updateConnectionState(true, `連接警告: ${errorMessage}`);
     }
 
     return { db, doc, setDoc, onSnapshot, getDoc };

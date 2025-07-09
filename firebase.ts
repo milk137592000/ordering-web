@@ -2,6 +2,9 @@
 // 這個檔案作為一個橋樑，讓這些服務可以透過標準的 ES6 模組導入方式被應用程式的其他部分使用，
 // 而無需更改任何其他檔案。
 
+// 導入連接狀態管理
+import { addConnectionListener as importedAddConnectionListener, getConnectionState as importedGetConnectionState } from './firebase-emulator';
+
 // 型別斷言，告知 TypeScript 我們全域物件的結構。
 interface FirebaseServices {
   db: any; // 理想情況下會導入真實型別，但此處 'any' 是安全的。
@@ -19,31 +22,9 @@ interface ConnectionState {
   lastSuccessfulOperation: number;
 }
 
-let connectionState: ConnectionState = {
-  isConnected: false,
-  lastError: null,
-  retryCount: 0,
-  lastSuccessfulOperation: Date.now()
-};
-
-// 連接狀態監聽器
-const connectionListeners: ((state: ConnectionState) => void)[] = [];
-
-// 添加連接狀態監聽器
-export const addConnectionListener = (listener: (state: ConnectionState) => void) => {
-  connectionListeners.push(listener);
-  return () => {
-    const index = connectionListeners.indexOf(listener);
-    if (index > -1) {
-      connectionListeners.splice(index, 1);
-    }
-  };
-};
-
-// 通知連接狀態變更
-const notifyConnectionChange = () => {
-  connectionListeners.forEach(listener => listener({ ...connectionState }));
-};
+// 使用 firebase-emulator.ts 中的連接狀態管理
+export const addConnectionListener = importedAddConnectionListener;
+export const getConnectionState = importedGetConnectionState;
 
 // 重試配置
 const RETRY_CONFIG = {
@@ -86,22 +67,9 @@ const withRetry = async <T>(
     try {
       const result = await withTimeout(operation());
 
-      // 操作成功，更新連接狀態
-      connectionState.isConnected = true;
-      connectionState.lastError = null;
-      connectionState.retryCount = 0;
-      connectionState.lastSuccessfulOperation = Date.now();
-      notifyConnectionChange();
-
       return result;
     } catch (error) {
       lastError = error instanceof Error ? error : new Error(String(error));
-
-      // 更新連接狀態
-      connectionState.isConnected = false;
-      connectionState.lastError = lastError.message;
-      connectionState.retryCount = attempt + 1;
-      notifyConnectionChange();
 
       console.warn(`${operationName} 失敗 (嘗試 ${attempt + 1}/${RETRY_CONFIG.maxRetries + 1}):`, lastError.message);
 
@@ -200,21 +168,10 @@ const wrappedOnSnapshot = (...args: any[]): (() => void) => {
   const currentServices = getServices();
 
   const enhancedCallback = (snapshot: any) => {
-    // 成功接收到數據，更新連接狀態
-    connectionState.isConnected = true;
-    connectionState.lastError = null;
-    connectionState.lastSuccessfulOperation = Date.now();
-    notifyConnectionChange();
-
     callback(snapshot);
   };
 
   const enhancedErrorCallback = (error: any) => {
-    // 連接錯誤，更新狀態
-    connectionState.isConnected = false;
-    connectionState.lastError = error.message || String(error);
-    notifyConnectionChange();
-
     console.error('Firebase onSnapshot 錯誤:', error);
 
     if (errorCallback) {
@@ -232,6 +189,5 @@ export const setDoc = wrappedSetDoc;
 export const getDoc = wrappedGetDoc;
 export const onSnapshot = wrappedOnSnapshot;
 
-// 導出連接狀態和工具函數
-export const getConnectionState = () => ({ ...connectionState });
-export const isFirebaseConnected = () => connectionState.isConnected;
+// 導出連接狀態檢查函數
+export const isFirebaseConnected = () => getConnectionState().isConnected;

@@ -49,6 +49,11 @@ export interface OrderItem extends MenuItem {
   ice?: number; // 0-10
   toppings?: string[];
   customRequest?: string;
+  // 新增字段以支持管理員點餐界面
+  type?: 'restaurant' | 'drink';
+  quantity?: number;
+  storeId?: number;
+  storeName?: string;
 }
 
 

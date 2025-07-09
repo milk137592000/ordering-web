@@ -106,9 +106,11 @@ const DrinkOrderingInterface: React.FC<DrinkOrderingInterfaceProps> = ({
     }
 
     const orderItem: OrderItem = {
-      id: `drink-${item.id}-${Date.now()}`,
+      id: item.id,
       name: item.name,
       price: item.price,
+      instanceId: `drink-${item.id}-${Date.now()}-${Math.random()}`,
+      storeType: 'drink_shop',
       type: 'drink',
       quantity: 1,
       storeId: drinkShop?.id || 0,
@@ -283,20 +285,18 @@ const DrinkOrderingInterface: React.FC<DrinkOrderingInterfaceProps> = ({
                           <p className="text-slate-600">${item.price}</p>
                         </div>
                         <div className="flex items-center gap-2">
+                          <Button
+                            onClick={() => handleDecreaseItem(item)}
+                            disabled={!selectedUserId || quantity === 0}
+                            size="small"
+                            variant="secondary"
+                          >
+                            <MinusIcon className="h-4 w-4" />
+                          </Button>
                           {quantity > 0 && (
-                            <>
-                              <Button
-                                onClick={() => handleDecreaseItem(item)}
-                                disabled={!selectedUserId}
-                                size="small"
-                                variant="secondary"
-                              >
-                                <MinusIcon className="h-4 w-4" />
-                              </Button>
-                              <span className="min-w-[2rem] text-center font-medium text-slate-800">
-                                {quantity}
-                              </span>
-                            </>
+                            <span className="min-w-[2rem] text-center font-medium text-slate-800">
+                              {quantity}
+                            </span>
                           )}
                           <Button
                             onClick={() => handleAddItem(item)}
