@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Store } from '../types';
+import { Store, TeamMember } from '../types';
 import Button from './common/Button';
 import Card from './common/Card';
 import { ClockIcon, StoreIcon, ShuffleIcon } from './icons';
+import { loadTeamMembers } from '../src/utils/teamMembers';
 
 interface SetupInterfaceProps {
   restaurants: Store[];
@@ -21,6 +22,22 @@ const SetupInterface: React.FC<SetupInterfaceProps> = ({
   const [selectedRestaurantId, setSelectedRestaurantId] = useState<number | null>(null);
   const [selectedDrinkShopId, setSelectedDrinkShopId] = useState<number | null>(null);
   const [currentStep, setCurrentStep] = useState(1);
+  const [teamMembers, setTeamMembers] = useState<{ id: string; name: string }[]>([]);
+  const [selectedMembers, setSelectedMembers] = useState<string[]>([]);
+  const [newMemberName, setNewMemberName] = useState('');
+  const [showAddMember, setShowAddMember] = useState(false);
+
+  // 載入團隊成員
+  useEffect(() => {
+    const loadMembers = async () => {
+      const members = await loadTeamMembers();
+      setTeamMembers(members);
+      // 預設選擇所有成員
+      setSelectedMembers(members.map(m => m.id));
+    };
+
+    loadMembers();
+  }, []);
 
   // 調試：檢查接收到的數據
   useEffect(() => {
@@ -36,15 +53,48 @@ const SetupInterface: React.FC<SetupInterfaceProps> = ({
     setDeadline(defaultTime);
   }, []);
 
+  // 處理成員選擇
+  const handleMemberToggle = (memberId: string) => {
+    setSelectedMembers(prev =>
+      prev.includes(memberId)
+        ? prev.filter(id => id !== memberId)
+        : [...prev, memberId]
+    );
+  };
+
+  // 添加新成員
+  const handleAddMember = () => {
+    if (!newMemberName.trim()) {
+      alert('請輸入成員姓名');
+      return;
+    }
+
+    const newMember = {
+      id: `temp-${Date.now()}`,
+      name: newMemberName.trim()
+    };
+
+    setTeamMembers(prev => [...prev, newMember]);
+    setSelectedMembers(prev => [...prev, newMember.id]);
+    setNewMemberName('');
+    setShowAddMember(false);
+  };
+
   const handleNext = () => {
     if (currentStep === 1) {
-      if (!deadline) {
-        alert('請設定截止時間');
+      if (selectedMembers.length === 0) {
+        alert('請至少選擇一位成員');
         return;
       }
       setCurrentStep(2);
     } else if (currentStep === 2) {
+      if (!deadline) {
+        alert('請設定截止時間');
+        return;
+      }
       setCurrentStep(3);
+    } else if (currentStep === 3) {
+      setCurrentStep(4);
     } else {
       // 完成設定
       if (!selectedRestaurantId && !selectedDrinkShopId) {
@@ -86,8 +136,8 @@ const SetupInterface: React.FC<SetupInterfaceProps> = ({
           <div className="space-y-6">
             <div className="text-center">
               <ClockIcon className="h-16 w-16 text-indigo-600 mx-auto mb-4" />
-              <h2 className="text-2xl font-bold text-slate-800 mb-2">設定訂單截止時間</h2>
-              <p className="text-slate-600">設定一個截止時間，讓大家知道什麼時候要完成點餐</p>
+              <h2 className="text-2xl font-bold text-slate-800 mb-2">選擇參與點餐的成員</h2>
+              <p className="text-slate-600">選擇要參與這次點餐的團隊成員</p>
             </div>
 
             <div className="bg-indigo-50 p-4 rounded-lg">
@@ -97,6 +147,71 @@ const SetupInterface: React.FC<SetupInterfaceProps> = ({
               <p className="text-xs text-indigo-600">
                 請將此ID分享給其他人，讓他們可以加入點餐
               </p>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-3">
+                團隊成員
+              </label>
+              <div className="space-y-2 max-h-60 overflow-y-auto">
+                {teamMembers.map((member) => (
+                  <label key={member.id} className="flex items-center p-3 border border-slate-200 rounded-lg hover:bg-slate-50 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={selectedMembers.includes(member.id)}
+                      onChange={() => handleMemberToggle(member.id)}
+                      className="mr-3 h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-slate-300 rounded"
+                    />
+                    <span className="text-slate-800">{member.name}</span>
+                  </label>
+                ))}
+              </div>
+
+              {showAddMember ? (
+                <div className="mt-4 p-4 bg-slate-50 rounded-lg">
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    新成員姓名
+                  </label>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={newMemberName}
+                      onChange={(e) => setNewMemberName(e.target.value)}
+                      placeholder="請輸入成員姓名"
+                      className="flex-1 px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    />
+                    <Button onClick={handleAddMember} size="small">
+                      新增
+                    </Button>
+                    <Button onClick={() => setShowAddMember(false)} variant="secondary" size="small">
+                      取消
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <Button
+                  onClick={() => setShowAddMember(true)}
+                  variant="secondary"
+                  className="mt-4 w-full"
+                >
+                  + 新增成員
+                </Button>
+              )}
+
+              <p className="text-xs text-slate-500 mt-2">
+                已選擇 {selectedMembers.length} 位成員
+              </p>
+            </div>
+          </div>
+        );
+
+      case 2:
+        return (
+          <div className="space-y-6">
+            <div className="text-center">
+              <ClockIcon className="h-16 w-16 text-indigo-600 mx-auto mb-4" />
+              <h2 className="text-2xl font-bold text-slate-800 mb-2">設定訂單截止時間</h2>
+              <p className="text-slate-600">設定一個截止時間，讓大家知道什麼時候要完成點餐</p>
             </div>
 
             <div>
@@ -116,7 +231,7 @@ const SetupInterface: React.FC<SetupInterfaceProps> = ({
           </div>
         );
 
-      case 2:
+      case 3:
         return (
           <div className="space-y-6">
             <div className="text-center">
@@ -171,7 +286,7 @@ const SetupInterface: React.FC<SetupInterfaceProps> = ({
           </div>
         );
 
-      case 3:
+      case 4:
         return (
           <div className="space-y-6">
             <div className="text-center">
@@ -237,7 +352,7 @@ const SetupInterface: React.FC<SetupInterfaceProps> = ({
         <div className="p-6">
           {/* 進度指示器 */}
           <div className="flex items-center justify-center mb-6">
-            {[1, 2, 3].map((step) => (
+            {[1, 2, 3, 4].map((step) => (
               <React.Fragment key={step}>
                 <div
                   className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
@@ -248,7 +363,7 @@ const SetupInterface: React.FC<SetupInterfaceProps> = ({
                 >
                   {step}
                 </div>
-                {step < 3 && (
+                {step < 4 && (
                   <div
                     className={`w-8 h-1 ${
                       step < currentStep ? 'bg-indigo-600' : 'bg-slate-200'
@@ -268,7 +383,7 @@ const SetupInterface: React.FC<SetupInterfaceProps> = ({
               </Button>
             )}
             <Button onClick={handleNext} className="flex-1">
-              {currentStep === 3 ? '完成設定' : '下一步'}
+              {currentStep === 4 ? '完成設定' : '下一步'}
             </Button>
           </div>
         </div>

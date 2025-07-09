@@ -16,6 +16,7 @@ import { LogoIcon, RefreshIcon, HistoryIcon } from './components/icons';
 import * as firebaseServices from './firebase';
 import Button from './components/common/Button';
 import { parseStoresFromMarkdown } from './src/utils/parseStores';
+import { loadTeamMembers } from './src/utils/teamMembers';
 
 const SESSION_ID = 'active_session'; // Using a single document for the current session
 
@@ -155,19 +156,7 @@ const App: React.FC = () => {
   const handleCreateNewOrder = useCallback(async () => {
     setIsInitializing(true);
     try {
-        const mateResponse = await fetch('mate.md');
-        if (!mateResponse.ok) {
-            throw new Error('無法讀取成員資料檔案。');
-        }
-        const mateText = await mateResponse.text();
-        const parsedMembers = mateText.trim().split('\n')
-            .map(name => name.trim())
-            .filter(Boolean)
-            .map((name, index) => ({ id: `member-${index + 1}`, name }));
-        
-        if (parsedMembers.length === 0) {
-            parsedMembers.push({ id: 'member-1', name: '預設成員' });
-        }
+        const parsedMembers = await loadTeamMembers();
 
         const now = new Date().toISOString();
         const orderId = `order_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;

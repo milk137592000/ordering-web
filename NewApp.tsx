@@ -3,6 +3,8 @@ import { AppPhase, UserRole, UserSession, SessionData, Store, OrderItem, Histori
 import IdentitySelection from './components/IdentitySelection';
 import SetupInterface from './components/SetupInterface';
 import AdminOrderingInterface from './components/AdminOrderingInterface';
+import RestaurantOrderingInterface from './components/RestaurantOrderingInterface';
+import DrinkOrderingInterface from './components/DrinkOrderingInterface';
 import RestaurantOrdering from './components/RestaurantOrdering';
 import DrinkOrdering from './components/DrinkOrdering';
 import PersonalOrderSummary from './components/PersonalOrderSummary';
@@ -13,6 +15,7 @@ import { LogoIcon, RefreshIcon, HistoryIcon } from './components/icons';
 import * as firebaseServices from './firebase';
 import Button from './components/common/Button';
 import { parseStoresFromMarkdown } from './src/utils/parseStores';
+import { loadTeamMembers } from './src/utils/teamMembers';
 
 enum ViewMode {
   ORDERING = 'ordering',
@@ -138,19 +141,27 @@ const NewApp: React.FC = () => {
       const [hours, minutes] = deadline.split(':');
       const deadlineDate = new Date();
       deadlineDate.setHours(parseInt(hours), parseInt(minutes), 0, 0);
-      
+
       // 如果截止時間是明天
       if (deadlineDate <= now) {
         deadlineDate.setDate(deadlineDate.getDate() + 1);
+      }
+
+      // 載入團隊成員列表
+      const teamMembers = await loadTeamMembers();
+
+      // 如果沒有成員，添加一個預設成員
+      if (teamMembers.length === 0) {
+        teamMembers.push({ id: 'member-1', name: '預設成員' });
       }
 
       const newSessionData: SessionData = {
         orderId: userSession.orderId!,
         adminId: userSession.userId,
         adminName: userSession.userName,
-        phase: AppPhase.ADMIN_ORDERING,
-        teamMembers: [],
-        orders: [],
+        phase: AppPhase.RESTAURANT_ORDERING,
+        teamMembers: teamMembers,
+        orders: teamMembers.map(m => ({ memberId: m.id, items: [] })),
         selectedRestaurantId: restaurantId,
         selectedDrinkShopId: drinkShopId,
         deadline: deadlineDate.toISOString(),
@@ -259,6 +270,40 @@ const NewApp: React.FC = () => {
       setError('更新階段失敗，請重試');
     }
   }, [userSession, sessionData]);
+
+  // 處理餐廳點餐完成
+  const handleRestaurantOrderingComplete = useCallback(() => {
+    if (!userSession) return;
+
+    const nextPhase = sessionData?.selectedDrinkShopId ? AppPhase.DRINK_ORDERING : AppPhase.PERSONAL_SUMMARY;
+    const updatedUserSession = {
+      ...userSession,
+      currentPhase: nextPhase
+    };
+    setUserSession(updatedUserSession);
+  }, [userSession, sessionData]);
+
+  // 處理飲料點餐完成
+  const handleDrinkOrderingComplete = useCallback(() => {
+    if (!userSession) return;
+
+    const updatedUserSession = {
+      ...userSession,
+      currentPhase: AppPhase.PERSONAL_SUMMARY
+    };
+    setUserSession(updatedUserSession);
+  }, [userSession]);
+
+  // 處理返回餐廳點餐
+  const handleBackToRestaurantOrdering = useCallback(() => {
+    if (!userSession) return;
+
+    const updatedUserSession = {
+      ...userSession,
+      currentPhase: AppPhase.RESTAURANT_ORDERING
+    };
+    setUserSession(updatedUserSession);
+  }, [userSession]);
 
   // 處理繼續到下一階段
   const handleContinue = useCallback(() => {
@@ -372,35 +417,31 @@ const NewApp: React.FC = () => {
             onOrderUpdate={handleAdminOrderUpdate}
             onComplete={handleAdminOrderingComplete}
             existingOrders={sessionData?.memberOrders || {}}
+            teamMembers={sessionData?.teamMembers || []}
           />
         );
 
       case AppPhase.RESTAURANT_ORDERING:
-        if (!selectedRestaurant) return <div>載入餐廳資料中...</div>;
         return (
-          <RestaurantOrdering
+          <RestaurantOrderingInterface
             restaurant={selectedRestaurant}
-            personalOrder={userSession.personalOrder}
-            onAddItem={handleAddItem}
-            onRemoveItem={handleRemoveItem}
-            onContinue={handleContinue}
-            deadline={deadline}
-            isDeadlineReached={isDeadlineReached}
+            onOrderUpdate={handleAdminOrderUpdate}
+            onComplete={handleRestaurantOrderingComplete}
+            onBack={handleBack}
+            existingOrders={sessionData?.memberOrders || {}}
+            teamMembers={sessionData?.teamMembers || []}
           />
         );
 
       case AppPhase.DRINK_ORDERING:
-        if (!selectedDrinkShop) return <div>載入飲料店資料中...</div>;
         return (
-          <DrinkOrdering
+          <DrinkOrderingInterface
             drinkShop={selectedDrinkShop}
-            personalOrder={userSession.personalOrder}
-            onAddItem={handleAddItem}
-            onRemoveItem={handleRemoveItem}
-            onContinue={handleContinue}
-            onBack={handleBack}
-            deadline={deadline}
-            isDeadlineReached={isDeadlineReached}
+            onOrderUpdate={handleAdminOrderUpdate}
+            onComplete={handleDrinkOrderingComplete}
+            onBack={handleBackToRestaurantOrdering}
+            existingOrders={sessionData?.memberOrders || {}}
+            teamMembers={sessionData?.teamMembers || []}
           />
         );
 

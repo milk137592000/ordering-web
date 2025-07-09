@@ -3,6 +3,7 @@ import { UserRole, TeamMember } from '../types';
 import Button from './common/Button';
 import Card from './common/Card';
 import { UserIcon, PlusIcon } from './icons';
+import { loadTeamMembers } from '../src/utils/teamMembers';
 
 interface IdentitySelectionProps {
   onSelectRole: (role: UserRole, userName: string, orderId?: string) => void;
@@ -18,39 +19,12 @@ const IdentitySelection: React.FC<IdentitySelectionProps> = ({ onSelectRole }) =
 
   // 載入團隊成員列表
   useEffect(() => {
-    const loadTeamMembers = async () => {
-      try {
-        console.log('開始載入團隊成員列表...');
-        const mateResponse = await fetch('/mate.md');
-        console.log('mate.md 請求狀態:', mateResponse.status, mateResponse.ok);
-
-        if (!mateResponse.ok) {
-          throw new Error(`HTTP error! status: ${mateResponse.status}`);
-        }
-
-        const mateText = await mateResponse.text();
-        console.log('mate.md 內容:', mateText);
-
-        const members = mateText.trim().split('\n')
-          .map(name => name.trim())
-          .filter(Boolean)
-          .map((name, index) => ({ id: `member-${index + 1}`, name }));
-
-        if (members.length === 0) {
-          members.push({ id: 'member-1', name: '預設成員' });
-        }
-
-        console.log('解析的成員列表:', members);
-        setTeamMembers(members);
-      } catch (error) {
-        console.error('無法載入團隊成員列表:', error);
-        const defaultMembers = [{ id: 'member-1', name: '預設成員' }];
-        console.log('使用預設成員列表:', defaultMembers);
-        setTeamMembers(defaultMembers);
-      }
+    const loadMembers = async () => {
+      const members = await loadTeamMembers();
+      setTeamMembers(members);
     };
 
-    loadTeamMembers();
+    loadMembers();
   }, []);
 
   const handleUserNameChange = (value: string) => {
