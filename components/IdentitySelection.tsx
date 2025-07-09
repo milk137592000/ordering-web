@@ -20,23 +20,32 @@ const IdentitySelection: React.FC<IdentitySelectionProps> = ({ onSelectRole }) =
   useEffect(() => {
     const loadTeamMembers = async () => {
       try {
+        console.log('開始載入團隊成員列表...');
         const mateResponse = await fetch('/mate.md');
-        if (mateResponse.ok) {
-          const mateText = await mateResponse.text();
-          const members = mateText.trim().split('\n')
-            .map(name => name.trim())
-            .filter(Boolean)
-            .map((name, index) => ({ id: `member-${index + 1}`, name }));
+        console.log('mate.md 請求狀態:', mateResponse.status, mateResponse.ok);
 
-          if (members.length === 0) {
-            members.push({ id: 'member-1', name: '預設成員' });
-          }
-
-          setTeamMembers(members);
+        if (!mateResponse.ok) {
+          throw new Error(`HTTP error! status: ${mateResponse.status}`);
         }
+
+        const mateText = await mateResponse.text();
+        console.log('mate.md 內容:', mateText);
+
+        const members = mateText.trim().split('\n')
+          .map(name => name.trim())
+          .filter(Boolean)
+          .map((name, index) => ({ id: `member-${index + 1}`, name }));
+
+        if (members.length === 0) {
+          members.push({ id: 'member-1', name: '預設成員' });
+        }
+
+        console.log('解析的成員列表:', members);
+        setTeamMembers(members);
       } catch (error) {
-        console.warn('無法載入團隊成員列表:', error);
+        console.error('無法載入團隊成員列表:', error);
         const defaultMembers = [{ id: 'member-1', name: '預設成員' }];
+        console.log('使用預設成員列表:', defaultMembers);
         setTeamMembers(defaultMembers);
       }
     };
