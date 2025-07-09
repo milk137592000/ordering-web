@@ -46,6 +46,10 @@
               console.log('📱 離線模式：數據已保存到本地');
               return Promise.resolve();
             },
+            updateDoc: () => {
+              console.log('📱 離線模式：數據已更新到本地');
+              return Promise.resolve();
+            },
             onSnapshot: () => {
               console.log('📱 離線模式：使用本地數據');
               return () => {}; // 返回一個假的取消訂閱函式

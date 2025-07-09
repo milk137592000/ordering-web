@@ -3,6 +3,7 @@ import { Store, OrderItem } from '../types';
 import Button from './common/Button';
 import Card from './common/Card';
 import { PlusIcon, MinusIcon, UserIcon } from './icons';
+import DrinkCustomizationDialog from './DrinkCustomizationDialog';
 
 interface DrinkOrderingInterfaceProps {
   drinkShop: Store | null;
@@ -26,6 +27,8 @@ const DrinkOrderingInterface: React.FC<DrinkOrderingInterfaceProps> = ({
   const [newMemberName, setNewMemberName] = useState<string>('');
   const [currentItems, setCurrentItems] = useState<OrderItem[]>([]);
   const [showNewMemberInput, setShowNewMemberInput] = useState(false);
+  const [showCustomizationDialog, setShowCustomizationDialog] = useState(false);
+  const [customizingItem, setCustomizingItem] = useState<any>(null);
 
   // 獲取所有用戶列表（團隊成員 + 已有訂單的用戶）
   const allUsers = React.useMemo(() => {
@@ -105,23 +108,22 @@ const DrinkOrderingInterface: React.FC<DrinkOrderingInterfaceProps> = ({
       return;
     }
 
-    const orderItem: OrderItem = {
-      id: item.id,
-      name: item.name,
-      price: item.price,
-      instanceId: `drink-${item.id}-${Date.now()}-${Math.random()}`,
-      storeType: 'drink_shop',
-      type: 'drink',
-      quantity: 1,
-      storeId: drinkShop?.id || 0,
-      storeName: drinkShop?.name || ''
-    };
+    // 顯示客製化對話框
+    setCustomizingItem(item);
+    setShowCustomizationDialog(true);
+  }, [selectedUserId]);
 
+  // 處理客製化完成
+  const handleCustomizationConfirm = useCallback((customizedItem: OrderItem) => {
     setCurrentItems(prev => {
-      const existingIndex = prev.findIndex(i => 
-        i.name === item.name && i.type === 'drink' && i.storeId === orderItem.storeId
+      const existingIndex = prev.findIndex(i =>
+        i.name === customizedItem.name &&
+        i.type === 'drink' &&
+        i.storeId === customizedItem.storeId &&
+        i.sweetness === customizedItem.sweetness &&
+        i.ice === customizedItem.ice
       );
-      
+
       if (existingIndex >= 0) {
         const updated = [...prev];
         updated[existingIndex] = {
@@ -130,10 +132,19 @@ const DrinkOrderingInterface: React.FC<DrinkOrderingInterfaceProps> = ({
         };
         return updated;
       } else {
-        return [...prev, orderItem];
+        return [...prev, customizedItem];
       }
     });
-  }, [selectedUserId, drinkShop]);
+
+    setShowCustomizationDialog(false);
+    setCustomizingItem(null);
+  }, []);
+
+  // 處理客製化取消
+  const handleCustomizationCancel = useCallback(() => {
+    setShowCustomizationDialog(false);
+    setCustomizingItem(null);
+  }, []);
 
   // 減少商品數量
   const handleDecreaseItem = useCallback((item: any) => {
@@ -325,6 +336,16 @@ const DrinkOrderingInterface: React.FC<DrinkOrderingInterfaceProps> = ({
           完成點餐設定
         </Button>
       </div>
+
+      {/* 飲料客製化對話框 */}
+      {showCustomizationDialog && customizingItem && (
+        <DrinkCustomizationDialog
+          item={customizingItem}
+          drinkShop={drinkShop}
+          onConfirm={handleCustomizationConfirm}
+          onCancel={handleCustomizationCancel}
+        />
+      )}
     </div>
   );
 };

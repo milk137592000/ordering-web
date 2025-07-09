@@ -10,6 +10,7 @@ interface FirebaseServices {
   db: any; // 理想情況下會導入真實型別，但此處 'any' 是安全的。
   doc: (...args: any[]) => any;
   setDoc: (...args: any[]) => Promise<void>;
+  updateDoc: (...args: any[]) => Promise<void>;
   onSnapshot: (...args: any[]) => () => void; // 返回一個取消訂閱的函式
   getDoc: (...args: any[]) => Promise<any>;
 }
@@ -125,6 +126,10 @@ const getFirebaseServices = (): FirebaseServices => {
         console.log('📱 離線模式：數據已保存到本地');
         return Promise.resolve();
       },
+      updateDoc: () => {
+        console.log('📱 離線模式：數據已更新到本地');
+        return Promise.resolve();
+      },
       onSnapshot: () => {
         console.log('📱 離線模式：使用本地數據');
         return () => {};
@@ -152,6 +157,10 @@ const getServices = (): FirebaseServices => {
       console.log('📱 離線模式：數據已保存到本地');
       return Promise.resolve();
     },
+    updateDoc: () => {
+      console.log('📱 離線模式：數據已更新到本地');
+      return Promise.resolve();
+    },
     onSnapshot: () => {
       console.log('📱 離線模式：使用本地數據');
       return () => {};
@@ -167,6 +176,12 @@ const getServices = (): FirebaseServices => {
 const wrappedSetDoc = async (...args: any[]): Promise<void> => {
   const currentServices = getServices();
   return withRetry(() => currentServices.setDoc(...args), 'setDoc');
+};
+
+const wrappedUpdateDoc = async (...args: any[]): Promise<void> => {
+  const currentServices = getServices();
+  // 在離線模式下，updateDoc 等同於 setDoc
+  return withRetry(() => currentServices.setDoc(...args), 'updateDoc');
 };
 
 const wrappedGetDoc = async (...args: any[]): Promise<any> => {
@@ -198,6 +213,7 @@ const wrappedOnSnapshot = (...args: any[]): (() => void) => {
 const services = getServices();
 export const { db, doc } = services;
 export const setDoc = wrappedSetDoc;
+export const updateDoc = wrappedUpdateDoc;
 export const getDoc = wrappedGetDoc;
 export const onSnapshot = wrappedOnSnapshot;
 

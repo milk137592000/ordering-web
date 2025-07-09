@@ -103,7 +103,7 @@ export const initializeFirebaseServices = async () => {
   try {
     // 動態導入 Firebase 模組
     const { initializeApp } = await import("https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js");
-    const { getFirestore, connectFirestoreEmulator, doc, setDoc, onSnapshot, getDoc } =
+    const { getFirestore, connectFirestoreEmulator, doc, setDoc, updateDoc, onSnapshot, getDoc } =
       await import("https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js");
 
     const app = initializeApp(config);
@@ -132,7 +132,7 @@ export const initializeFirebaseServices = async () => {
       updateConnectionState(false, `離線模式: ${errorMessage}`);
     }
 
-    return { db, doc, setDoc, onSnapshot, getDoc };
+    return { db, doc, setDoc, updateDoc, onSnapshot, getDoc };
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     console.log("ℹ️ Firebase 初始化失敗，使用離線模式:", errorMessage);
@@ -144,6 +144,10 @@ export const initializeFirebaseServices = async () => {
       doc: () => ({ id: 'offline-doc' }),
       setDoc: () => {
         console.log('📱 離線模式：數據已保存到本地');
+        return Promise.resolve();
+      },
+      updateDoc: () => {
+        console.log('📱 離線模式：數據已更新到本地');
         return Promise.resolve();
       },
       onSnapshot: () => {
