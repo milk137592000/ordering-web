@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>同步修復測試頁面</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8fafc;
+        }
+        .container {
+            background: white;
+            border-radius: 8px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .test-section {
+            margin-bottom: 20px;
+            padding: 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+        }
+        .test-button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .test-button:hover {
+            background: #2563eb;
+        }
+        .test-button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+        .log-container {
+            background: #1f2937;
+            color: #f9fafb;
+            padding: 16px;
+            border-radius: 6px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+        .status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .status.success { background: #10b981; color: white; }
+        .status.error { background: #ef4444; color: white; }
+        .status.warning { background: #f59e0b; color: white; }
+        .status.info { background: #3b82f6; color: white; }
+        .iframe-container {
+            margin-top: 20px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        iframe {
+            width: 100%;
+            height: 600px;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔧 同步修復測試工具</h1>
+            <p>測試增強的同步功能和錯誤處理機制</p>
+        </div>
+
+        <div class="test-section">
+            <h3>📊 應用程式狀態</h3>
+            <p>當前時間: <span id="current-time"></span></p>
+            <p>網路狀態: <span id="network-status" class="status info">檢查中...</span></p>
+            <p>應用程式狀態: <span id="app-status" class="status info">載入中...</span></p>
+        </div>
+
+        <div class="test-section">
+            <h3>🧪 測試操作</h3>
+            <button class="test-button" onclick="runAllTests()">🚀 執行所有測試</button>
+            <button class="test-button" onclick="testFirebaseConnection()">🔥 測試Firebase連接</button>
+            <button class="test-button" onclick="testRetryMechanism()">🔄 測試重試機制</button>
+            <button class="test-button" onclick="simulateNetworkIssue()">📵 模擬網路問題</button>
+            <button class="test-button" onclick="clearLogs()">🗑️ 清除日誌</button>
+        </div>
+
+        <div class="test-section">
+            <h3>📱 應用程式預覽</h3>
+            <p>在下方iframe中查看實際應用程式狀態：</p>
+            <div class="iframe-container">
+                <iframe src="http://localhost:5173/" id="app-iframe"></iframe>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>📝 測試日誌</h3>
+            <div class="log-container" id="log-container">
+                <div>🚀 測試工具已準備就緒...</div>
+                <div>💡 點擊上方按鈕開始測試</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 日誌管理
+        function addLog(message, type = 'info') {
+            const logContainer = document.getElementById('log-container');
+            const timestamp = new Date().toLocaleTimeString('zh-TW');
+            const logEntry = document.createElement('div');
+            logEntry.innerHTML = `<span style="color: #6b7280;">[${timestamp}]</span> ${message}`;
+            logContainer.appendChild(logEntry);
+            logContainer.scrollTop = logContainer.scrollHeight;
+        }
+
+        function clearLogs() {
+            document.getElementById('log-container').innerHTML = '';
+            addLog('📝 日誌已清除');
+        }
+
+        // 更新狀態顯示
+        function updateStatus() {
+            document.getElementById('current-time').textContent = new Date().toLocaleString('zh-TW');
+            
+            const networkStatus = navigator.onLine ? 'success' : 'error';
+            const networkText = navigator.onLine ? '✅ 在線' : '❌ 離線';
+            document.getElementById('network-status').className = `status ${networkStatus}`;
+            document.getElementById('network-status').textContent = networkText;
+        }
+
+        // 測試Firebase連接
+        async function testFirebaseConnection() {
+            addLog('🔥 開始測試Firebase連接...');
+            
+            try {
+                const iframe = document.getElementById('app-iframe');
+                const firebaseServices = iframe.contentWindow?.firebaseServices;
+                
+                if (firebaseServices) {
+                    addLog('✅ Firebase服務已載入');
+                    addLog(`📊 數據庫狀態: ${firebaseServices.db ? '已連接' : '離線模式'}`);
+                    
+                    document.getElementById('app-status').className = 'status success';
+                    document.getElementById('app-status').textContent = '✅ 正常運行';
+                } else {
+                    addLog('❌ 無法訪問Firebase服務');
+                    document.getElementById('app-status').className = 'status error';
+                    document.getElementById('app-status').textContent = '❌ 服務異常';
+                }
+            } catch (error) {
+                addLog(`❌ 測試Firebase連接時發生錯誤: ${error.message}`);
+            }
+        }
+
+        // 測試重試機制
+        async function testRetryMechanism() {
+            addLog('🔄 開始測試重試機制...');
+            
+            try {
+                const iframe = document.getElementById('app-iframe');
+                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                
+                // 查找重試按鈕
+                const retryButton = Array.from(iframeDoc.querySelectorAll('button')).find(btn => 
+                    btn.textContent.includes('重試') || btn.textContent.includes('🔄')
+                );
+                
+                if (retryButton) {
+                    addLog('✅ 找到重試按鈕');
+                    retryButton.click();
+                    addLog('🔄 已觸發重試操作');
+                } else {
+                    addLog('ℹ️ 當前沒有重試按鈕（可能表示沒有錯誤）');
+                }
+            } catch (error) {
+                addLog(`❌ 測試重試機制時發生錯誤: ${error.message}`);
+            }
+        }
+
+        // 模擬網路問題
+        async function simulateNetworkIssue() {
+            addLog('📵 模擬網路斷線...');
+            
+            // 模擬離線狀態
+            Object.defineProperty(navigator, 'onLine', {
+                writable: true,
+                value: false
+            });
+            
+            window.dispatchEvent(new Event('offline'));
+            updateStatus();
+            
+            addLog('⏳ 等待3秒後恢復網路...');
+            
+            setTimeout(() => {
+                Object.defineProperty(navigator, 'onLine', {
+                    writable: true,
+                    value: true
+                });
+                
+                window.dispatchEvent(new Event('online'));
+                updateStatus();
+                addLog('🌐 網路已恢復');
+            }, 3000);
+        }
+
+        // 執行所有測試
+        async function runAllTests() {
+            addLog('🚀 開始執行完整測試套件...');
+            addLog('='.repeat(50));
+            
+            await testFirebaseConnection();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            await testRetryMechanism();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            await simulateNetworkIssue();
+            
+            addLog('='.repeat(50));
+            addLog('✅ 所有測試執行完成');
+        }
+
+        // 初始化
+        updateStatus();
+        setInterval(updateStatus, 5000); // 每5秒更新一次狀態
+
+        // 監聽網路狀態變化
+        window.addEventListener('online', () => {
+            addLog('🌐 網路已連接');
+            updateStatus();
+        });
+
+        window.addEventListener('offline', () => {
+            addLog('📵 網路已斷線');
+            updateStatus();
+        });
+
+        // iframe載入完成後的處理
+        document.getElementById('app-iframe').addEventListener('load', () => {
+            addLog('📱 應用程式已載入');
+            setTimeout(testFirebaseConnection, 2000);
+        });
+    </script>
+</body>
+</html>

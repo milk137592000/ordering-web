@@ -1,0 +1,471 @@
+<testsuites id="" name="" tests="19" failures="3" skipped="16" errors="0" time="306.855309">
+<testsuite name="basic-functionality.spec.ts" timestamp="2025-07-10T13:37:47.994Z" hostname="stable-chrome" tests="8" failures="3" skipped="5" time="302.554" errors="0">
+<testcase name="Basic Functionality Tests › should load the application successfully" classname="basic-functionality.spec.ts" time="92.701">
+<failure message="basic-functionality.spec.ts:28:3 should load the application successfully" type="FAILURE">
+<![CDATA[  [stable-chrome] › basic-functionality.spec.ts:28:3 › Basic Functionality Tests › should load the application successfully 
+
+    TimeoutError: page.waitForLoadState: Timeout 30000ms exceeded.
+
+       at utils/test-stability-helpers.ts:237
+
+      235 |   
+      236 |   // 等待網路空閒
+    > 237 |   await page.waitForLoadState('networkidle', { timeout: opts.timeout });
+          |              ^
+      238 |   
+      239 |   // 等待 React 渲染完成
+      240 |   await page.waitForFunction(() => {
+        at waitForPageLoad (/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts:237:14)
+        at /Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/basic-functionality.spec.ts:17:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/basic-functionality-Basic--563bf-he-application-successfully-stable-chrome/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/basic-functionality-Basic--563bf-he-application-successfully-stable-chrome/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/basic-functionality-Basic--563bf-he-application-successfully-stable-chrome/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/basic-functionality-Basic--563bf-he-application-successfully-stable-chrome/trace.zip
+    Usage:
+
+        npx playwright show-trace ../test-results/basic-functionality-Basic--563bf-he-application-successfully-stable-chrome/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.waitForLoadState: Timeout 30000ms exceeded.
+
+       at utils/test-stability-helpers.ts:237
+
+      235 |   
+      236 |   // 等待網路空閒
+    > 237 |   await page.waitForLoadState('networkidle', { timeout: opts.timeout });
+          |              ^
+      238 |   
+      239 |   // 等待 React 渲染完成
+      240 |   await page.waitForFunction(() => {
+        at waitForPageLoad (/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts:237:14)
+        at /Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/basic-functionality.spec.ts:17:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/basic-functionality-Basic--563bf-he-application-successfully-stable-chrome-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/basic-functionality-Basic--563bf-he-application-successfully-stable-chrome-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/basic-functionality-Basic--563bf-he-application-successfully-stable-chrome-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/basic-functionality-Basic--563bf-he-application-successfully-stable-chrome-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace ../test-results/basic-functionality-Basic--563bf-he-application-successfully-stable-chrome-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.waitForLoadState: Timeout 30000ms exceeded.
+
+       at utils/test-stability-helpers.ts:237
+
+      235 |   
+      236 |   // 等待網路空閒
+    > 237 |   await page.waitForLoadState('networkidle', { timeout: opts.timeout });
+          |              ^
+      238 |   
+      239 |   // 等待 React 渲染完成
+      240 |   await page.waitForFunction(() => {
+        at waitForPageLoad (/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts:237:14)
+        at /Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/basic-functionality.spec.ts:17:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/basic-functionality-Basic--563bf-he-application-successfully-stable-chrome-retry2/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/basic-functionality-Basic--563bf-he-application-successfully-stable-chrome-retry2/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/basic-functionality-Basic--563bf-he-application-successfully-stable-chrome-retry2/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/basic-functionality-Basic--563bf-he-application-successfully-stable-chrome-retry2/trace.zip
+    Usage:
+
+        npx playwright show-trace ../test-results/basic-functionality-Basic--563bf-he-application-successfully-stable-chrome-retry2/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/basic-functionality-Basic--563bf-he-application-successfully-stable-chrome/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/basic-functionality-Basic--563bf-he-application-successfully-stable-chrome/video.webm]]
+
+[[ATTACHMENT|../test-results/basic-functionality-Basic--563bf-he-application-successfully-stable-chrome/error-context.md]]
+
+[[ATTACHMENT|../test-results/basic-functionality-Basic--563bf-he-application-successfully-stable-chrome/trace.zip]]
+
+[[ATTACHMENT|../test-results/basic-functionality-Basic--563bf-he-application-successfully-stable-chrome-retry1/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/basic-functionality-Basic--563bf-he-application-successfully-stable-chrome-retry1/video.webm]]
+
+[[ATTACHMENT|../test-results/basic-functionality-Basic--563bf-he-application-successfully-stable-chrome-retry1/error-context.md]]
+
+[[ATTACHMENT|../test-results/basic-functionality-Basic--563bf-he-application-successfully-stable-chrome-retry1/trace.zip]]
+
+[[ATTACHMENT|../test-results/basic-functionality-Basic--563bf-he-application-successfully-stable-chrome-retry2/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/basic-functionality-Basic--563bf-he-application-successfully-stable-chrome-retry2/video.webm]]
+
+[[ATTACHMENT|../test-results/basic-functionality-Basic--563bf-he-application-successfully-stable-chrome-retry2/error-context.md]]
+
+[[ATTACHMENT|../test-results/basic-functionality-Basic--563bf-he-application-successfully-stable-chrome-retry2/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Basic Functionality Tests › should display main navigation elements" classname="basic-functionality.spec.ts" time="92.556">
+<failure message="basic-functionality.spec.ts:42:3 should display main navigation elements" type="FAILURE">
+<![CDATA[  [stable-chrome] › basic-functionality.spec.ts:42:3 › Basic Functionality Tests › should display main navigation elements 
+
+    TimeoutError: page.waitForLoadState: Timeout 30000ms exceeded.
+
+       at utils/test-stability-helpers.ts:237
+
+      235 |   
+      236 |   // 等待網路空閒
+    > 237 |   await page.waitForLoadState('networkidle', { timeout: opts.timeout });
+          |              ^
+      238 |   
+      239 |   // 等待 React 渲染完成
+      240 |   await page.waitForFunction(() => {
+        at waitForPageLoad (/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts:237:14)
+        at /Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/basic-functionality.spec.ts:17:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/basic-functionality-Basic--022b7-ay-main-navigation-elements-stable-chrome/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/basic-functionality-Basic--022b7-ay-main-navigation-elements-stable-chrome/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/basic-functionality-Basic--022b7-ay-main-navigation-elements-stable-chrome/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/basic-functionality-Basic--022b7-ay-main-navigation-elements-stable-chrome/trace.zip
+    Usage:
+
+        npx playwright show-trace ../test-results/basic-functionality-Basic--022b7-ay-main-navigation-elements-stable-chrome/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.waitForLoadState: Timeout 30000ms exceeded.
+
+       at utils/test-stability-helpers.ts:237
+
+      235 |   
+      236 |   // 等待網路空閒
+    > 237 |   await page.waitForLoadState('networkidle', { timeout: opts.timeout });
+          |              ^
+      238 |   
+      239 |   // 等待 React 渲染完成
+      240 |   await page.waitForFunction(() => {
+        at waitForPageLoad (/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts:237:14)
+        at /Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/basic-functionality.spec.ts:17:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/basic-functionality-Basic--022b7-ay-main-navigation-elements-stable-chrome-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/basic-functionality-Basic--022b7-ay-main-navigation-elements-stable-chrome-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/basic-functionality-Basic--022b7-ay-main-navigation-elements-stable-chrome-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/basic-functionality-Basic--022b7-ay-main-navigation-elements-stable-chrome-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace ../test-results/basic-functionality-Basic--022b7-ay-main-navigation-elements-stable-chrome-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.waitForLoadState: Timeout 30000ms exceeded.
+
+       at utils/test-stability-helpers.ts:237
+
+      235 |   
+      236 |   // 等待網路空閒
+    > 237 |   await page.waitForLoadState('networkidle', { timeout: opts.timeout });
+          |              ^
+      238 |   
+      239 |   // 等待 React 渲染完成
+      240 |   await page.waitForFunction(() => {
+        at waitForPageLoad (/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts:237:14)
+        at /Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/basic-functionality.spec.ts:17:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/basic-functionality-Basic--022b7-ay-main-navigation-elements-stable-chrome-retry2/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/basic-functionality-Basic--022b7-ay-main-navigation-elements-stable-chrome-retry2/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/basic-functionality-Basic--022b7-ay-main-navigation-elements-stable-chrome-retry2/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/basic-functionality-Basic--022b7-ay-main-navigation-elements-stable-chrome-retry2/trace.zip
+    Usage:
+
+        npx playwright show-trace ../test-results/basic-functionality-Basic--022b7-ay-main-navigation-elements-stable-chrome-retry2/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/basic-functionality-Basic--022b7-ay-main-navigation-elements-stable-chrome/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/basic-functionality-Basic--022b7-ay-main-navigation-elements-stable-chrome/video.webm]]
+
+[[ATTACHMENT|../test-results/basic-functionality-Basic--022b7-ay-main-navigation-elements-stable-chrome/error-context.md]]
+
+[[ATTACHMENT|../test-results/basic-functionality-Basic--022b7-ay-main-navigation-elements-stable-chrome/trace.zip]]
+
+[[ATTACHMENT|../test-results/basic-functionality-Basic--022b7-ay-main-navigation-elements-stable-chrome-retry1/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/basic-functionality-Basic--022b7-ay-main-navigation-elements-stable-chrome-retry1/video.webm]]
+
+[[ATTACHMENT|../test-results/basic-functionality-Basic--022b7-ay-main-navigation-elements-stable-chrome-retry1/error-context.md]]
+
+[[ATTACHMENT|../test-results/basic-functionality-Basic--022b7-ay-main-navigation-elements-stable-chrome-retry1/trace.zip]]
+
+[[ATTACHMENT|../test-results/basic-functionality-Basic--022b7-ay-main-navigation-elements-stable-chrome-retry2/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/basic-functionality-Basic--022b7-ay-main-navigation-elements-stable-chrome-retry2/video.webm]]
+
+[[ATTACHMENT|../test-results/basic-functionality-Basic--022b7-ay-main-navigation-elements-stable-chrome-retry2/error-context.md]]
+
+[[ATTACHMENT|../test-results/basic-functionality-Basic--022b7-ay-main-navigation-elements-stable-chrome-retry2/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Basic Functionality Tests › should be responsive on mobile viewport" classname="basic-functionality.spec.ts" time="92.548">
+<failure message="basic-functionality.spec.ts:51:3 should be responsive on mobile viewport" type="FAILURE">
+<![CDATA[  [stable-chrome] › basic-functionality.spec.ts:51:3 › Basic Functionality Tests › should be responsive on mobile viewport 
+
+    TimeoutError: page.waitForLoadState: Timeout 30000ms exceeded.
+
+       at utils/test-stability-helpers.ts:237
+
+      235 |   
+      236 |   // 等待網路空閒
+    > 237 |   await page.waitForLoadState('networkidle', { timeout: opts.timeout });
+          |              ^
+      238 |   
+      239 |   // 等待 React 渲染完成
+      240 |   await page.waitForFunction(() => {
+        at waitForPageLoad (/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts:237:14)
+        at /Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/basic-functionality.spec.ts:17:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/basic-functionality-Basic--463cd-sponsive-on-mobile-viewport-stable-chrome/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/basic-functionality-Basic--463cd-sponsive-on-mobile-viewport-stable-chrome/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/basic-functionality-Basic--463cd-sponsive-on-mobile-viewport-stable-chrome/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/basic-functionality-Basic--463cd-sponsive-on-mobile-viewport-stable-chrome/trace.zip
+    Usage:
+
+        npx playwright show-trace ../test-results/basic-functionality-Basic--463cd-sponsive-on-mobile-viewport-stable-chrome/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.waitForLoadState: Timeout 30000ms exceeded.
+
+       at utils/test-stability-helpers.ts:237
+
+      235 |   
+      236 |   // 等待網路空閒
+    > 237 |   await page.waitForLoadState('networkidle', { timeout: opts.timeout });
+          |              ^
+      238 |   
+      239 |   // 等待 React 渲染完成
+      240 |   await page.waitForFunction(() => {
+        at waitForPageLoad (/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts:237:14)
+        at /Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/basic-functionality.spec.ts:17:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/basic-functionality-Basic--463cd-sponsive-on-mobile-viewport-stable-chrome-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/basic-functionality-Basic--463cd-sponsive-on-mobile-viewport-stable-chrome-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/basic-functionality-Basic--463cd-sponsive-on-mobile-viewport-stable-chrome-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/basic-functionality-Basic--463cd-sponsive-on-mobile-viewport-stable-chrome-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace ../test-results/basic-functionality-Basic--463cd-sponsive-on-mobile-viewport-stable-chrome-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+
+    TimeoutError: page.waitForLoadState: Timeout 30000ms exceeded.
+
+       at utils/test-stability-helpers.ts:237
+
+      235 |   
+      236 |   // 等待網路空閒
+    > 237 |   await page.waitForLoadState('networkidle', { timeout: opts.timeout });
+          |              ^
+      238 |   
+      239 |   // 等待 React 渲染完成
+      240 |   await page.waitForFunction(() => {
+        at waitForPageLoad (/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts:237:14)
+        at /Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/basic-functionality.spec.ts:17:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/basic-functionality-Basic--463cd-sponsive-on-mobile-viewport-stable-chrome-retry2/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../test-results/basic-functionality-Basic--463cd-sponsive-on-mobile-viewport-stable-chrome-retry2/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/basic-functionality-Basic--463cd-sponsive-on-mobile-viewport-stable-chrome-retry2/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/basic-functionality-Basic--463cd-sponsive-on-mobile-viewport-stable-chrome-retry2/trace.zip
+    Usage:
+
+        npx playwright show-trace ../test-results/basic-functionality-Basic--463cd-sponsive-on-mobile-viewport-stable-chrome-retry2/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|../test-results/basic-functionality-Basic--463cd-sponsive-on-mobile-viewport-stable-chrome/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/basic-functionality-Basic--463cd-sponsive-on-mobile-viewport-stable-chrome/video.webm]]
+
+[[ATTACHMENT|../test-results/basic-functionality-Basic--463cd-sponsive-on-mobile-viewport-stable-chrome/error-context.md]]
+
+[[ATTACHMENT|../test-results/basic-functionality-Basic--463cd-sponsive-on-mobile-viewport-stable-chrome/trace.zip]]
+
+[[ATTACHMENT|../test-results/basic-functionality-Basic--463cd-sponsive-on-mobile-viewport-stable-chrome-retry1/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/basic-functionality-Basic--463cd-sponsive-on-mobile-viewport-stable-chrome-retry1/video.webm]]
+
+[[ATTACHMENT|../test-results/basic-functionality-Basic--463cd-sponsive-on-mobile-viewport-stable-chrome-retry1/error-context.md]]
+
+[[ATTACHMENT|../test-results/basic-functionality-Basic--463cd-sponsive-on-mobile-viewport-stable-chrome-retry1/trace.zip]]
+
+[[ATTACHMENT|../test-results/basic-functionality-Basic--463cd-sponsive-on-mobile-viewport-stable-chrome-retry2/test-failed-1.png]]
+
+[[ATTACHMENT|../test-results/basic-functionality-Basic--463cd-sponsive-on-mobile-viewport-stable-chrome-retry2/video.webm]]
+
+[[ATTACHMENT|../test-results/basic-functionality-Basic--463cd-sponsive-on-mobile-viewport-stable-chrome-retry2/error-context.md]]
+
+[[ATTACHMENT|../test-results/basic-functionality-Basic--463cd-sponsive-on-mobile-viewport-stable-chrome-retry2/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Basic Functionality Tests › should handle basic user interactions" classname="basic-functionality.spec.ts" time="24.749">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Basic Functionality Tests › should have proper accessibility basics" classname="basic-functionality.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Basic Functionality Tests › should handle keyboard navigation" classname="basic-functionality.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Basic Functionality Tests › should load without console errors" classname="basic-functionality.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Basic Functionality Tests › should have reasonable performance" classname="basic-functionality.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="complete-ordering-flow.spec.ts" timestamp="2025-07-10T13:37:47.994Z" hostname="stable-chrome" tests="3" failures="0" skipped="3" time="0" errors="0">
+<testcase name="Complete Ordering Flow › should complete full ordering flow from team setup to order completion" classname="complete-ordering-flow.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Complete Ordering Flow › should handle navigation between phases correctly" classname="complete-ordering-flow.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Complete Ordering Flow › should handle temporary member addition during ordering" classname="complete-ordering-flow.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="error-handling.spec.ts" timestamp="2025-07-10T13:37:47.994Z" hostname="stable-chrome" tests="8" failures="0" skipped="8" time="0" errors="0">
+<testcase name="Error Handling and Edge Cases › should handle network errors gracefully" classname="error-handling.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Error Handling and Edge Cases › should validate team member input" classname="error-handling.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Error Handling and Edge Cases › should handle deadline validation" classname="error-handling.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Error Handling and Edge Cases › should handle empty order submission" classname="error-handling.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Error Handling and Edge Cases › should handle Firebase connection errors" classname="error-handling.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Error Handling and Edge Cases › should handle large team sizes" classname="error-handling.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Error Handling and Edge Cases › should handle session timeout" classname="error-handling.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Error Handling and Edge Cases › should handle browser refresh during ordering" classname="error-handling.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+</testsuites>

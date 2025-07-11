@@ -13,6 +13,7 @@ interface FirebaseServices {
   updateDoc: (...args: any[]) => Promise<void>;
   onSnapshot: (...args: any[]) => () => void; // 返回一個取消訂閱的函式
   getDoc: (...args: any[]) => Promise<any>;
+  runTransaction: (...args: any[]) => Promise<any>;
 }
 
 // 連接狀態管理
@@ -137,6 +138,10 @@ const getFirebaseServices = (): FirebaseServices => {
       getDoc: () => {
         console.log('📱 離線模式：返回本地數據');
         return Promise.resolve({ exists: () => false, data: () => ({}) });
+      },
+      runTransaction: () => {
+        console.log('📱 離線模式：事務操作已跳過');
+        return Promise.resolve();
       }
     };
   }
@@ -168,6 +173,10 @@ const getServices = (): FirebaseServices => {
     getDoc: () => {
       console.log('📱 離線模式：返回本地數據');
       return Promise.resolve({ exists: () => false, data: () => ({}) });
+    },
+    runTransaction: () => {
+      console.log('📱 離線模式：事務操作已跳過');
+      return Promise.resolve();
     }
   };
 };
@@ -187,6 +196,11 @@ const wrappedUpdateDoc = async (...args: any[]): Promise<void> => {
 const wrappedGetDoc = async (...args: any[]): Promise<any> => {
   const currentServices = getServices();
   return withRetry(() => currentServices.getDoc(...args), 'getDoc');
+};
+
+const wrappedRunTransaction = async (...args: any[]): Promise<any> => {
+  const currentServices = getServices();
+  return withRetry(() => currentServices.runTransaction(...args), 'runTransaction');
 };
 
 // onSnapshot 需要特殊處理，因為它是實時監聽器
@@ -216,6 +230,18 @@ export const setDoc = wrappedSetDoc;
 export const updateDoc = wrappedUpdateDoc;
 export const getDoc = wrappedGetDoc;
 export const onSnapshot = wrappedOnSnapshot;
+export const runTransaction = wrappedRunTransaction;
+
+// 導出完整的 firebaseServices 對象（用於解構賦值）
+export const firebaseServices = {
+  db: services.db,
+  doc: services.doc,
+  setDoc: wrappedSetDoc,
+  updateDoc: wrappedUpdateDoc,
+  getDoc: wrappedGetDoc,
+  onSnapshot: wrappedOnSnapshot,
+  runTransaction: wrappedRunTransaction
+};
 
 // 導出連接狀態檢查函數
 export const isFirebaseConnected = () => getConnectionState().isConnected;

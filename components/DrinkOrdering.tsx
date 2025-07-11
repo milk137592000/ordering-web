@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Store, OrderItem, MenuItem } from '../types';
 import Button from './common/Button';
 import Card from './common/Card';
@@ -67,6 +67,18 @@ const DrinkOrdering: React.FC<DrinkOrderingProps> = ({
   const drinkTotal = personalOrder
     .filter(item => item.storeType === 'drink_shop')
     .reduce((sum, item) => sum + item.price, 0);
+
+  // 檢查是否有點飲料
+  const hasOrderedDrinks = personalOrder.some(item => item.storeType === 'drink_shop');
+
+  // 處理完成點餐
+  const handleComplete = useCallback(() => {
+    if (!hasOrderedDrinks) {
+      alert('請至少點一杯飲料才能完成點餐');
+      return;
+    }
+    onContinue();
+  }, [hasOrderedDrinks, onContinue]);
 
   return (
     <div className="min-h-screen bg-slate-50 p-4">
@@ -206,12 +218,18 @@ const DrinkOrdering: React.FC<DrinkOrderingProps> = ({
                     返回餐點選擇
                   </Button>
                   <Button
-                    onClick={onContinue}
+                    onClick={handleComplete}
                     className="w-full"
                     size="large"
+                    disabled={isDeadlineReached || !hasOrderedDrinks}
                   >
                     完成點餐
                   </Button>
+                  {!hasOrderedDrinks && !isDeadlineReached && (
+                    <p className="text-sm text-slate-500 text-center">
+                      請至少點一杯飲料才能完成點餐
+                    </p>
+                  )}
                 </div>
               </div>
             </Card>

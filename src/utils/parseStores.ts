@@ -129,6 +129,45 @@ export const parseStoresFromMarkdown = (
   return stores;
 };
 
+// 添加"其他選項"到餐廳菜單
+const addOtherOptionsToRestaurants = (stores: Store[]): Store[] => {
+  return stores.map(store => {
+    if (store.type === 'restaurant') {
+      // 為餐廳添加"其他選項"分類
+      const otherOptionsCategory: MenuCategory = {
+        name: '其他選項',
+        items: [
+          {
+            id: 99999, // 使用特殊ID來標識其他選項
+            name: '其他選項（請在備註中說明需求和價格）',
+            price: 0 // 預設價格為0，用戶需要自行輸入
+          }
+        ]
+      };
+
+      return {
+        ...store,
+        menu: [...store.menu, otherOptionsCategory]
+      };
+    }
+    return store;
+  });
+};
+
+// 解析餐廳和飲料店數據的主函數
+export const parseStores = (text: string): Store[] => {
+  const idCounters = { store: 1, item: 101 };
+
+  // 分別解析餐廳和飲料店
+  const restaurants = parseStoresFromMarkdown(text, 'restaurant', idCounters);
+  const drinkShops = parseStoresFromMarkdown(text, 'drink_shop', idCounters);
+
+  // 為餐廳添加"其他選項"
+  const restaurantsWithOtherOptions = addOtherOptionsToRestaurants(restaurants);
+
+  return [...restaurantsWithOtherOptions, ...drinkShops];
+};
+
 export const loadStoresData = async (): Promise<Store[]> => {
   try {
     console.log('開始載入餐廳數據...');

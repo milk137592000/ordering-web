@@ -1,0 +1,1101 @@
+{
+  "config": {
+    "configFile": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/playwright-stable.config.ts",
+    "rootDir": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "html",
+        {
+          "outputFolder": "stable-report"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "stable-results/results.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "stable-results/results.xml"
+        }
+      ],
+      [
+        "line",
+        null
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/test-results",
+        "repeatEach": 1,
+        "retries": 2,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "stable-chrome",
+        "name": "stable-chrome",
+        "testDir": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/basic-functionality.spec.ts",
+          "**/complete-ordering-flow.spec.ts",
+          "**/error-handling.spec.ts"
+        ],
+        "timeout": 90000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.54.0",
+    "workers": 1,
+    "webServer": {
+      "command": "npm run dev",
+      "url": "http://localhost:5173",
+      "reuseExistingServer": true,
+      "timeout": 120000,
+      "stdout": "pipe",
+      "stderr": "pipe"
+    }
+  },
+  "suites": [
+    {
+      "title": "basic-functionality.spec.ts",
+      "file": "basic-functionality.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Basic Functionality Tests",
+          "file": "basic-functionality.spec.ts",
+          "line": 10,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should load the application successfully",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "stable-chrome",
+                  "projectName": "stable-chrome",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 31021,
+                      "error": {
+                        "message": "TimeoutError: page.waitForLoadState: Timeout 30000ms exceeded.",
+                        "stack": "TimeoutError: page.waitForLoadState: Timeout 30000ms exceeded.\n    at waitForPageLoad (/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts:237:14)\n    at /Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/basic-functionality.spec.ts:17:5",
+                        "location": {
+                          "file": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts",
+                          "column": 14,
+                          "line": 237
+                        },
+                        "snippet": "\u001b[90m   at \u001b[39mutils/test-stability-helpers.ts:237\n\n\u001b[0m \u001b[90m 235 |\u001b[39m   \n \u001b[90m 236 |\u001b[39m   \u001b[90m// 等待網路空閒\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 237 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForLoadState(\u001b[32m'networkidle'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m opts\u001b[33m.\u001b[39mtimeout })\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 238 |\u001b[39m   \n \u001b[90m 239 |\u001b[39m   \u001b[90m// 等待 React 渲染完成\u001b[39m\n \u001b[90m 240 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForFunction(() \u001b[33m=>\u001b[39m {\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts",
+                            "column": 14,
+                            "line": 237
+                          },
+                          "message": "TimeoutError: page.waitForLoadState: Timeout 30000ms exceeded.\n\n\u001b[90m   at \u001b[39mutils/test-stability-helpers.ts:237\n\n\u001b[0m \u001b[90m 235 |\u001b[39m   \n \u001b[90m 236 |\u001b[39m   \u001b[90m// 等待網路空閒\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 237 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForLoadState(\u001b[32m'networkidle'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m opts\u001b[33m.\u001b[39mtimeout })\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 238 |\u001b[39m   \n \u001b[90m 239 |\u001b[39m   \u001b[90m// 等待 React 渲染完成\u001b[39m\n \u001b[90m 240 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForFunction(() \u001b[33m=>\u001b[39m {\u001b[0m\n\u001b[2m    at waitForPageLoad (/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts:237:14)\u001b[22m\n\u001b[2m    at /Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/basic-functionality.spec.ts:17:5\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-10T13:37:48.263Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/test-results/basic-functionality-Basic--563bf-he-application-successfully-stable-chrome/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/test-results/basic-functionality-Basic--563bf-he-application-successfully-stable-chrome/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/test-results/basic-functionality-Basic--563bf-he-application-successfully-stable-chrome/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/test-results/basic-functionality-Basic--563bf-he-application-successfully-stable-chrome/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts",
+                        "column": 14,
+                        "line": 237
+                      }
+                    },
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 30843,
+                      "error": {
+                        "message": "TimeoutError: page.waitForLoadState: Timeout 30000ms exceeded.",
+                        "stack": "TimeoutError: page.waitForLoadState: Timeout 30000ms exceeded.\n    at waitForPageLoad (/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts:237:14)\n    at /Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/basic-functionality.spec.ts:17:5",
+                        "location": {
+                          "file": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts",
+                          "column": 14,
+                          "line": 237
+                        },
+                        "snippet": "\u001b[90m   at \u001b[39mutils/test-stability-helpers.ts:237\n\n\u001b[0m \u001b[90m 235 |\u001b[39m   \n \u001b[90m 236 |\u001b[39m   \u001b[90m// 等待網路空閒\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 237 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForLoadState(\u001b[32m'networkidle'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m opts\u001b[33m.\u001b[39mtimeout })\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 238 |\u001b[39m   \n \u001b[90m 239 |\u001b[39m   \u001b[90m// 等待 React 渲染完成\u001b[39m\n \u001b[90m 240 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForFunction(() \u001b[33m=>\u001b[39m {\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts",
+                            "column": 14,
+                            "line": 237
+                          },
+                          "message": "TimeoutError: page.waitForLoadState: Timeout 30000ms exceeded.\n\n\u001b[90m   at \u001b[39mutils/test-stability-helpers.ts:237\n\n\u001b[0m \u001b[90m 235 |\u001b[39m   \n \u001b[90m 236 |\u001b[39m   \u001b[90m// 等待網路空閒\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 237 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForLoadState(\u001b[32m'networkidle'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m opts\u001b[33m.\u001b[39mtimeout })\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 238 |\u001b[39m   \n \u001b[90m 239 |\u001b[39m   \u001b[90m// 等待 React 渲染完成\u001b[39m\n \u001b[90m 240 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForFunction(() \u001b[33m=>\u001b[39m {\u001b[0m\n\u001b[2m    at waitForPageLoad (/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts:237:14)\u001b[22m\n\u001b[2m    at /Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/basic-functionality.spec.ts:17:5\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2025-07-10T13:38:19.810Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/test-results/basic-functionality-Basic--563bf-he-application-successfully-stable-chrome-retry1/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/test-results/basic-functionality-Basic--563bf-he-application-successfully-stable-chrome-retry1/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/test-results/basic-functionality-Basic--563bf-he-application-successfully-stable-chrome-retry1/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/test-results/basic-functionality-Basic--563bf-he-application-successfully-stable-chrome-retry1/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts",
+                        "column": 14,
+                        "line": 237
+                      }
+                    },
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 30837,
+                      "error": {
+                        "message": "TimeoutError: page.waitForLoadState: Timeout 30000ms exceeded.",
+                        "stack": "TimeoutError: page.waitForLoadState: Timeout 30000ms exceeded.\n    at waitForPageLoad (/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts:237:14)\n    at /Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/basic-functionality.spec.ts:17:5",
+                        "location": {
+                          "file": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts",
+                          "column": 14,
+                          "line": 237
+                        },
+                        "snippet": "\u001b[90m   at \u001b[39mutils/test-stability-helpers.ts:237\n\n\u001b[0m \u001b[90m 235 |\u001b[39m   \n \u001b[90m 236 |\u001b[39m   \u001b[90m// 等待網路空閒\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 237 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForLoadState(\u001b[32m'networkidle'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m opts\u001b[33m.\u001b[39mtimeout })\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 238 |\u001b[39m   \n \u001b[90m 239 |\u001b[39m   \u001b[90m// 等待 React 渲染完成\u001b[39m\n \u001b[90m 240 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForFunction(() \u001b[33m=>\u001b[39m {\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts",
+                            "column": 14,
+                            "line": 237
+                          },
+                          "message": "TimeoutError: page.waitForLoadState: Timeout 30000ms exceeded.\n\n\u001b[90m   at \u001b[39mutils/test-stability-helpers.ts:237\n\n\u001b[0m \u001b[90m 235 |\u001b[39m   \n \u001b[90m 236 |\u001b[39m   \u001b[90m// 等待網路空閒\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 237 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForLoadState(\u001b[32m'networkidle'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m opts\u001b[33m.\u001b[39mtimeout })\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 238 |\u001b[39m   \n \u001b[90m 239 |\u001b[39m   \u001b[90m// 等待 React 渲染完成\u001b[39m\n \u001b[90m 240 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForFunction(() \u001b[33m=>\u001b[39m {\u001b[0m\n\u001b[2m    at waitForPageLoad (/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts:237:14)\u001b[22m\n\u001b[2m    at /Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/basic-functionality.spec.ts:17:5\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 2,
+                      "startTime": "2025-07-10T13:38:51.067Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/test-results/basic-functionality-Basic--563bf-he-application-successfully-stable-chrome-retry2/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/test-results/basic-functionality-Basic--563bf-he-application-successfully-stable-chrome-retry2/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/test-results/basic-functionality-Basic--563bf-he-application-successfully-stable-chrome-retry2/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/test-results/basic-functionality-Basic--563bf-he-application-successfully-stable-chrome-retry2/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts",
+                        "column": 14,
+                        "line": 237
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "3e1fed252e99486c803c-6178d4f3914a11672275",
+              "file": "basic-functionality.spec.ts",
+              "line": 28,
+              "column": 3
+            },
+            {
+              "title": "should display main navigation elements",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "stable-chrome",
+                  "projectName": "stable-chrome",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 30836,
+                      "error": {
+                        "message": "TimeoutError: page.waitForLoadState: Timeout 30000ms exceeded.",
+                        "stack": "TimeoutError: page.waitForLoadState: Timeout 30000ms exceeded.\n    at waitForPageLoad (/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts:237:14)\n    at /Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/basic-functionality.spec.ts:17:5",
+                        "location": {
+                          "file": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts",
+                          "column": 14,
+                          "line": 237
+                        },
+                        "snippet": "\u001b[90m   at \u001b[39mutils/test-stability-helpers.ts:237\n\n\u001b[0m \u001b[90m 235 |\u001b[39m   \n \u001b[90m 236 |\u001b[39m   \u001b[90m// 等待網路空閒\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 237 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForLoadState(\u001b[32m'networkidle'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m opts\u001b[33m.\u001b[39mtimeout })\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 238 |\u001b[39m   \n \u001b[90m 239 |\u001b[39m   \u001b[90m// 等待 React 渲染完成\u001b[39m\n \u001b[90m 240 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForFunction(() \u001b[33m=>\u001b[39m {\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts",
+                            "column": 14,
+                            "line": 237
+                          },
+                          "message": "TimeoutError: page.waitForLoadState: Timeout 30000ms exceeded.\n\n\u001b[90m   at \u001b[39mutils/test-stability-helpers.ts:237\n\n\u001b[0m \u001b[90m 235 |\u001b[39m   \n \u001b[90m 236 |\u001b[39m   \u001b[90m// 等待網路空閒\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 237 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForLoadState(\u001b[32m'networkidle'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m opts\u001b[33m.\u001b[39mtimeout })\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 238 |\u001b[39m   \n \u001b[90m 239 |\u001b[39m   \u001b[90m// 等待 React 渲染完成\u001b[39m\n \u001b[90m 240 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForFunction(() \u001b[33m=>\u001b[39m {\u001b[0m\n\u001b[2m    at waitForPageLoad (/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts:237:14)\u001b[22m\n\u001b[2m    at /Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/basic-functionality.spec.ts:17:5\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-10T13:39:22.312Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/test-results/basic-functionality-Basic--022b7-ay-main-navigation-elements-stable-chrome/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/test-results/basic-functionality-Basic--022b7-ay-main-navigation-elements-stable-chrome/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/test-results/basic-functionality-Basic--022b7-ay-main-navigation-elements-stable-chrome/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/test-results/basic-functionality-Basic--022b7-ay-main-navigation-elements-stable-chrome/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts",
+                        "column": 14,
+                        "line": 237
+                      }
+                    },
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 30874,
+                      "error": {
+                        "message": "TimeoutError: page.waitForLoadState: Timeout 30000ms exceeded.",
+                        "stack": "TimeoutError: page.waitForLoadState: Timeout 30000ms exceeded.\n    at waitForPageLoad (/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts:237:14)\n    at /Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/basic-functionality.spec.ts:17:5",
+                        "location": {
+                          "file": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts",
+                          "column": 14,
+                          "line": 237
+                        },
+                        "snippet": "\u001b[90m   at \u001b[39mutils/test-stability-helpers.ts:237\n\n\u001b[0m \u001b[90m 235 |\u001b[39m   \n \u001b[90m 236 |\u001b[39m   \u001b[90m// 等待網路空閒\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 237 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForLoadState(\u001b[32m'networkidle'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m opts\u001b[33m.\u001b[39mtimeout })\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 238 |\u001b[39m   \n \u001b[90m 239 |\u001b[39m   \u001b[90m// 等待 React 渲染完成\u001b[39m\n \u001b[90m 240 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForFunction(() \u001b[33m=>\u001b[39m {\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts",
+                            "column": 14,
+                            "line": 237
+                          },
+                          "message": "TimeoutError: page.waitForLoadState: Timeout 30000ms exceeded.\n\n\u001b[90m   at \u001b[39mutils/test-stability-helpers.ts:237\n\n\u001b[0m \u001b[90m 235 |\u001b[39m   \n \u001b[90m 236 |\u001b[39m   \u001b[90m// 等待網路空閒\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 237 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForLoadState(\u001b[32m'networkidle'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m opts\u001b[33m.\u001b[39mtimeout })\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 238 |\u001b[39m   \n \u001b[90m 239 |\u001b[39m   \u001b[90m// 等待 React 渲染完成\u001b[39m\n \u001b[90m 240 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForFunction(() \u001b[33m=>\u001b[39m {\u001b[0m\n\u001b[2m    at waitForPageLoad (/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts:237:14)\u001b[22m\n\u001b[2m    at /Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/basic-functionality.spec.ts:17:5\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2025-07-10T13:39:53.558Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/test-results/basic-functionality-Basic--022b7-ay-main-navigation-elements-stable-chrome-retry1/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/test-results/basic-functionality-Basic--022b7-ay-main-navigation-elements-stable-chrome-retry1/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/test-results/basic-functionality-Basic--022b7-ay-main-navigation-elements-stable-chrome-retry1/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/test-results/basic-functionality-Basic--022b7-ay-main-navigation-elements-stable-chrome-retry1/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts",
+                        "column": 14,
+                        "line": 237
+                      }
+                    },
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 30846,
+                      "error": {
+                        "message": "TimeoutError: page.waitForLoadState: Timeout 30000ms exceeded.",
+                        "stack": "TimeoutError: page.waitForLoadState: Timeout 30000ms exceeded.\n    at waitForPageLoad (/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts:237:14)\n    at /Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/basic-functionality.spec.ts:17:5",
+                        "location": {
+                          "file": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts",
+                          "column": 14,
+                          "line": 237
+                        },
+                        "snippet": "\u001b[90m   at \u001b[39mutils/test-stability-helpers.ts:237\n\n\u001b[0m \u001b[90m 235 |\u001b[39m   \n \u001b[90m 236 |\u001b[39m   \u001b[90m// 等待網路空閒\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 237 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForLoadState(\u001b[32m'networkidle'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m opts\u001b[33m.\u001b[39mtimeout })\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 238 |\u001b[39m   \n \u001b[90m 239 |\u001b[39m   \u001b[90m// 等待 React 渲染完成\u001b[39m\n \u001b[90m 240 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForFunction(() \u001b[33m=>\u001b[39m {\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts",
+                            "column": 14,
+                            "line": 237
+                          },
+                          "message": "TimeoutError: page.waitForLoadState: Timeout 30000ms exceeded.\n\n\u001b[90m   at \u001b[39mutils/test-stability-helpers.ts:237\n\n\u001b[0m \u001b[90m 235 |\u001b[39m   \n \u001b[90m 236 |\u001b[39m   \u001b[90m// 等待網路空閒\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 237 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForLoadState(\u001b[32m'networkidle'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m opts\u001b[33m.\u001b[39mtimeout })\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 238 |\u001b[39m   \n \u001b[90m 239 |\u001b[39m   \u001b[90m// 等待 React 渲染完成\u001b[39m\n \u001b[90m 240 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForFunction(() \u001b[33m=>\u001b[39m {\u001b[0m\n\u001b[2m    at waitForPageLoad (/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts:237:14)\u001b[22m\n\u001b[2m    at /Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/basic-functionality.spec.ts:17:5\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 2,
+                      "startTime": "2025-07-10T13:40:24.905Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/test-results/basic-functionality-Basic--022b7-ay-main-navigation-elements-stable-chrome-retry2/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/test-results/basic-functionality-Basic--022b7-ay-main-navigation-elements-stable-chrome-retry2/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/test-results/basic-functionality-Basic--022b7-ay-main-navigation-elements-stable-chrome-retry2/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/test-results/basic-functionality-Basic--022b7-ay-main-navigation-elements-stable-chrome-retry2/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts",
+                        "column": 14,
+                        "line": 237
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "3e1fed252e99486c803c-65c6d65a2ba8cbacc6d5",
+              "file": "basic-functionality.spec.ts",
+              "line": 42,
+              "column": 3
+            },
+            {
+              "title": "should be responsive on mobile viewport",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "stable-chrome",
+                  "projectName": "stable-chrome",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 30853,
+                      "error": {
+                        "message": "TimeoutError: page.waitForLoadState: Timeout 30000ms exceeded.",
+                        "stack": "TimeoutError: page.waitForLoadState: Timeout 30000ms exceeded.\n    at waitForPageLoad (/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts:237:14)\n    at /Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/basic-functionality.spec.ts:17:5",
+                        "location": {
+                          "file": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts",
+                          "column": 14,
+                          "line": 237
+                        },
+                        "snippet": "\u001b[90m   at \u001b[39mutils/test-stability-helpers.ts:237\n\n\u001b[0m \u001b[90m 235 |\u001b[39m   \n \u001b[90m 236 |\u001b[39m   \u001b[90m// 等待網路空閒\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 237 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForLoadState(\u001b[32m'networkidle'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m opts\u001b[33m.\u001b[39mtimeout })\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 238 |\u001b[39m   \n \u001b[90m 239 |\u001b[39m   \u001b[90m// 等待 React 渲染完成\u001b[39m\n \u001b[90m 240 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForFunction(() \u001b[33m=>\u001b[39m {\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts",
+                            "column": 14,
+                            "line": 237
+                          },
+                          "message": "TimeoutError: page.waitForLoadState: Timeout 30000ms exceeded.\n\n\u001b[90m   at \u001b[39mutils/test-stability-helpers.ts:237\n\n\u001b[0m \u001b[90m 235 |\u001b[39m   \n \u001b[90m 236 |\u001b[39m   \u001b[90m// 等待網路空閒\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 237 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForLoadState(\u001b[32m'networkidle'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m opts\u001b[33m.\u001b[39mtimeout })\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 238 |\u001b[39m   \n \u001b[90m 239 |\u001b[39m   \u001b[90m// 等待 React 渲染完成\u001b[39m\n \u001b[90m 240 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForFunction(() \u001b[33m=>\u001b[39m {\u001b[0m\n\u001b[2m    at waitForPageLoad (/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts:237:14)\u001b[22m\n\u001b[2m    at /Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/basic-functionality.spec.ts:17:5\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-10T13:40:56.131Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/test-results/basic-functionality-Basic--463cd-sponsive-on-mobile-viewport-stable-chrome/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/test-results/basic-functionality-Basic--463cd-sponsive-on-mobile-viewport-stable-chrome/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/test-results/basic-functionality-Basic--463cd-sponsive-on-mobile-viewport-stable-chrome/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/test-results/basic-functionality-Basic--463cd-sponsive-on-mobile-viewport-stable-chrome/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts",
+                        "column": 14,
+                        "line": 237
+                      }
+                    },
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 30854,
+                      "error": {
+                        "message": "TimeoutError: page.waitForLoadState: Timeout 30000ms exceeded.",
+                        "stack": "TimeoutError: page.waitForLoadState: Timeout 30000ms exceeded.\n    at waitForPageLoad (/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts:237:14)\n    at /Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/basic-functionality.spec.ts:17:5",
+                        "location": {
+                          "file": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts",
+                          "column": 14,
+                          "line": 237
+                        },
+                        "snippet": "\u001b[90m   at \u001b[39mutils/test-stability-helpers.ts:237\n\n\u001b[0m \u001b[90m 235 |\u001b[39m   \n \u001b[90m 236 |\u001b[39m   \u001b[90m// 等待網路空閒\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 237 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForLoadState(\u001b[32m'networkidle'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m opts\u001b[33m.\u001b[39mtimeout })\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 238 |\u001b[39m   \n \u001b[90m 239 |\u001b[39m   \u001b[90m// 等待 React 渲染完成\u001b[39m\n \u001b[90m 240 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForFunction(() \u001b[33m=>\u001b[39m {\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts",
+                            "column": 14,
+                            "line": 237
+                          },
+                          "message": "TimeoutError: page.waitForLoadState: Timeout 30000ms exceeded.\n\n\u001b[90m   at \u001b[39mutils/test-stability-helpers.ts:237\n\n\u001b[0m \u001b[90m 235 |\u001b[39m   \n \u001b[90m 236 |\u001b[39m   \u001b[90m// 等待網路空閒\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 237 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForLoadState(\u001b[32m'networkidle'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m opts\u001b[33m.\u001b[39mtimeout })\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 238 |\u001b[39m   \n \u001b[90m 239 |\u001b[39m   \u001b[90m// 等待 React 渲染完成\u001b[39m\n \u001b[90m 240 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForFunction(() \u001b[33m=>\u001b[39m {\u001b[0m\n\u001b[2m    at waitForPageLoad (/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts:237:14)\u001b[22m\n\u001b[2m    at /Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/basic-functionality.spec.ts:17:5\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 1,
+                      "startTime": "2025-07-10T13:41:27.363Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/test-results/basic-functionality-Basic--463cd-sponsive-on-mobile-viewport-stable-chrome-retry1/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/test-results/basic-functionality-Basic--463cd-sponsive-on-mobile-viewport-stable-chrome-retry1/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/test-results/basic-functionality-Basic--463cd-sponsive-on-mobile-viewport-stable-chrome-retry1/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/test-results/basic-functionality-Basic--463cd-sponsive-on-mobile-viewport-stable-chrome-retry1/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts",
+                        "column": 14,
+                        "line": 237
+                      }
+                    },
+                    {
+                      "workerIndex": 8,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 30841,
+                      "error": {
+                        "message": "TimeoutError: page.waitForLoadState: Timeout 30000ms exceeded.",
+                        "stack": "TimeoutError: page.waitForLoadState: Timeout 30000ms exceeded.\n    at waitForPageLoad (/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts:237:14)\n    at /Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/basic-functionality.spec.ts:17:5",
+                        "location": {
+                          "file": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts",
+                          "column": 14,
+                          "line": 237
+                        },
+                        "snippet": "\u001b[90m   at \u001b[39mutils/test-stability-helpers.ts:237\n\n\u001b[0m \u001b[90m 235 |\u001b[39m   \n \u001b[90m 236 |\u001b[39m   \u001b[90m// 等待網路空閒\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 237 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForLoadState(\u001b[32m'networkidle'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m opts\u001b[33m.\u001b[39mtimeout })\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 238 |\u001b[39m   \n \u001b[90m 239 |\u001b[39m   \u001b[90m// 等待 React 渲染完成\u001b[39m\n \u001b[90m 240 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForFunction(() \u001b[33m=>\u001b[39m {\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts",
+                            "column": 14,
+                            "line": 237
+                          },
+                          "message": "TimeoutError: page.waitForLoadState: Timeout 30000ms exceeded.\n\n\u001b[90m   at \u001b[39mutils/test-stability-helpers.ts:237\n\n\u001b[0m \u001b[90m 235 |\u001b[39m   \n \u001b[90m 236 |\u001b[39m   \u001b[90m// 等待網路空閒\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 237 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForLoadState(\u001b[32m'networkidle'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m opts\u001b[33m.\u001b[39mtimeout })\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 238 |\u001b[39m   \n \u001b[90m 239 |\u001b[39m   \u001b[90m// 等待 React 渲染完成\u001b[39m\n \u001b[90m 240 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForFunction(() \u001b[33m=>\u001b[39m {\u001b[0m\n\u001b[2m    at waitForPageLoad (/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts:237:14)\u001b[22m\n\u001b[2m    at /Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/basic-functionality.spec.ts:17:5\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 2,
+                      "startTime": "2025-07-10T13:41:58.604Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/test-results/basic-functionality-Basic--463cd-sponsive-on-mobile-viewport-stable-chrome-retry2/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/test-results/basic-functionality-Basic--463cd-sponsive-on-mobile-viewport-stable-chrome-retry2/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/test-results/basic-functionality-Basic--463cd-sponsive-on-mobile-viewport-stable-chrome-retry2/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/test-results/basic-functionality-Basic--463cd-sponsive-on-mobile-viewport-stable-chrome-retry2/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts",
+                        "column": 14,
+                        "line": 237
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "3e1fed252e99486c803c-c70dd335023626f14054",
+              "file": "basic-functionality.spec.ts",
+              "line": 51,
+              "column": 3
+            },
+            {
+              "title": "should handle basic user interactions",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "stable-chrome",
+                  "projectName": "stable-chrome",
+                  "results": [
+                    {
+                      "workerIndex": 9,
+                      "parallelIndex": 0,
+                      "status": "interrupted",
+                      "duration": 24749,
+                      "error": {
+                        "message": "Error: page.waitForLoadState: Test ended.",
+                        "stack": "Error: page.waitForLoadState: Test ended.\n    at waitForPageLoad (/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts:237:14)\n    at /Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/basic-functionality.spec.ts:17:5",
+                        "location": {
+                          "file": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts",
+                          "column": 14,
+                          "line": 237
+                        },
+                        "snippet": "\u001b[90m   at \u001b[39mutils/test-stability-helpers.ts:237\n\n\u001b[0m \u001b[90m 235 |\u001b[39m   \n \u001b[90m 236 |\u001b[39m   \u001b[90m// 等待網路空閒\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 237 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForLoadState(\u001b[32m'networkidle'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m opts\u001b[33m.\u001b[39mtimeout })\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 238 |\u001b[39m   \n \u001b[90m 239 |\u001b[39m   \u001b[90m// 等待 React 渲染完成\u001b[39m\n \u001b[90m 240 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForFunction(() \u001b[33m=>\u001b[39m {\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts",
+                            "column": 14,
+                            "line": 237
+                          },
+                          "message": "Error: page.waitForLoadState: Test ended.\n\n\u001b[90m   at \u001b[39mutils/test-stability-helpers.ts:237\n\n\u001b[0m \u001b[90m 235 |\u001b[39m   \n \u001b[90m 236 |\u001b[39m   \u001b[90m// 等待網路空閒\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 237 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForLoadState(\u001b[32m'networkidle'\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m opts\u001b[33m.\u001b[39mtimeout })\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 238 |\u001b[39m   \n \u001b[90m 239 |\u001b[39m   \u001b[90m// 等待 React 渲染完成\u001b[39m\n \u001b[90m 240 |\u001b[39m   \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForFunction(() \u001b[33m=>\u001b[39m {\u001b[0m\n\u001b[2m    at waitForPageLoad (/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts:237:14)\u001b[22m\n\u001b[2m    at /Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/basic-functionality.spec.ts:17:5\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-10T13:42:29.833Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/test-results/basic-functionality-Basic--d4d8e-dle-basic-user-interactions-stable-chrome/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/test-results/basic-functionality-Basic--d4d8e-dle-basic-user-interactions-stable-chrome/video.webm"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/test-results/basic-functionality-Basic--d4d8e-dle-basic-user-interactions-stable-chrome/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/eugenefang/Desktop/code/丁二烯c班點餐系統 2/e2e/utils/test-stability-helpers.ts",
+                        "column": 14,
+                        "line": 237
+                      }
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "3e1fed252e99486c803c-410b9e51150478298a80",
+              "file": "basic-functionality.spec.ts",
+              "line": 63,
+              "column": 3
+            },
+            {
+              "title": "should have proper accessibility basics",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "stable-chrome",
+                  "projectName": "stable-chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "3e1fed252e99486c803c-8247e4848271bd8ae55f",
+              "file": "basic-functionality.spec.ts",
+              "line": 90,
+              "column": 3
+            },
+            {
+              "title": "should handle keyboard navigation",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "stable-chrome",
+                  "projectName": "stable-chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "3e1fed252e99486c803c-755bfecb624cb288729d",
+              "file": "basic-functionality.spec.ts",
+              "line": 108,
+              "column": 3
+            },
+            {
+              "title": "should load without console errors",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "stable-chrome",
+                  "projectName": "stable-chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "3e1fed252e99486c803c-984e1c289c4763fb849b",
+              "file": "basic-functionality.spec.ts",
+              "line": 120,
+              "column": 3
+            },
+            {
+              "title": "should have reasonable performance",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "stable-chrome",
+                  "projectName": "stable-chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "3e1fed252e99486c803c-b193e0eed29777fd2bc5",
+              "file": "basic-functionality.spec.ts",
+              "line": 144,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "complete-ordering-flow.spec.ts",
+      "file": "complete-ordering-flow.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Complete Ordering Flow",
+          "file": "complete-ordering-flow.spec.ts",
+          "line": 12,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should complete full ordering flow from team setup to order completion",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "stable-chrome",
+                  "projectName": "stable-chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "769106666a927d441845-60f0498c995f9126a345",
+              "file": "complete-ordering-flow.spec.ts",
+              "line": 32,
+              "column": 3
+            },
+            {
+              "title": "should handle navigation between phases correctly",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "stable-chrome",
+                  "projectName": "stable-chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "769106666a927d441845-65e06af1d994d372644e",
+              "file": "complete-ordering-flow.spec.ts",
+              "line": 136,
+              "column": 3
+            },
+            {
+              "title": "should handle temporary member addition during ordering",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "stable-chrome",
+                  "projectName": "stable-chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "769106666a927d441845-bdab978f061db1b293e4",
+              "file": "complete-ordering-flow.spec.ts",
+              "line": 161,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "error-handling.spec.ts",
+      "file": "error-handling.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Error Handling and Edge Cases",
+          "file": "error-handling.spec.ts",
+          "line": 8,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should handle network errors gracefully",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "stable-chrome",
+                  "projectName": "stable-chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "1a72721d9ac5c938e1fe-da730e0e0f7d09ecf97c",
+              "file": "error-handling.spec.ts",
+              "line": 22,
+              "column": 3
+            },
+            {
+              "title": "should validate team member input",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "stable-chrome",
+                  "projectName": "stable-chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "1a72721d9ac5c938e1fe-af4984267b5cde0d17b3",
+              "file": "error-handling.spec.ts",
+              "line": 41,
+              "column": 3
+            },
+            {
+              "title": "should handle deadline validation",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "stable-chrome",
+                  "projectName": "stable-chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "1a72721d9ac5c938e1fe-716275ac79e048065388",
+              "file": "error-handling.spec.ts",
+              "line": 60,
+              "column": 3
+            },
+            {
+              "title": "should handle empty order submission",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "stable-chrome",
+                  "projectName": "stable-chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "1a72721d9ac5c938e1fe-cf4e58d6e031afa55208",
+              "file": "error-handling.spec.ts",
+              "line": 87,
+              "column": 3
+            },
+            {
+              "title": "should handle Firebase connection errors",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "stable-chrome",
+                  "projectName": "stable-chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "1a72721d9ac5c938e1fe-593bae78e750bc90c558",
+              "file": "error-handling.spec.ts",
+              "line": 105,
+              "column": 3
+            },
+            {
+              "title": "should handle large team sizes",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "stable-chrome",
+                  "projectName": "stable-chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "1a72721d9ac5c938e1fe-bd52cb6e8be69b2a46a1",
+              "file": "error-handling.spec.ts",
+              "line": 136,
+              "column": 3
+            },
+            {
+              "title": "should handle session timeout",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "stable-chrome",
+                  "projectName": "stable-chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "1a72721d9ac5c938e1fe-5011df40c94c238b4fca",
+              "file": "error-handling.spec.ts",
+              "line": 161,
+              "column": 3
+            },
+            {
+              "title": "should handle browser refresh during ordering",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "stable-chrome",
+                  "projectName": "stable-chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "1a72721d9ac5c938e1fe-b2cc67346e35af8dc10b",
+              "file": "error-handling.spec.ts",
+              "line": 191,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2025-07-10T13:37:47.937Z",
+    "duration": 306855.30899999995,
+    "expected": 0,
+    "skipped": 16,
+    "unexpected": 3,
+    "flaky": 0
+  }
+}

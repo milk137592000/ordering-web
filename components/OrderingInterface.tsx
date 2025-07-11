@@ -4,6 +4,7 @@ import { TeamMember, Store, MemberOrder, MenuItem, OrderItem, Topping } from '..
 import Button from './common/Button';
 import Card from './common/Card';
 import { TrashIcon, CheckCircleIcon, ArrowLeftIcon, UserPlusIcon, ClockIcon } from './icons';
+import RestaurantCustomizationDialog from './RestaurantCustomizationDialog';
 
 interface OrderingInterfaceProps {
   teamMembers: TeamMember[];
@@ -159,6 +160,7 @@ const OrderingInterface: React.FC<OrderingInterfaceProps> = ({
   const [activeMemberId, setActiveMemberId] = useState<string>(teamMembers[0]?.id || '');
   const [tempMemberName, setTempMemberName] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showRestaurantCustomizationDialog, setShowRestaurantCustomizationDialog] = useState(false);
   const [customizingItem, setCustomizingItem] = useState<MenuItem | null>(null);
 
   const [timeInput, setTimeInput] = useState('');
@@ -206,12 +208,9 @@ const OrderingInterface: React.FC<OrderingInterfaceProps> = ({
           setCustomizingItem(item);
           setIsModalOpen(true);
       } else {
-          const newOrderItem: OrderItem = {
-              ...item,
-              instanceId: `item-${Date.now()}-${Math.random()}`,
-              storeType: 'restaurant',
-          };
-          onAddItem(activeMemberId, newOrderItem);
+          // 顯示餐點客製化對話框
+          setCustomizingItem(item);
+          setShowRestaurantCustomizationDialog(true);
       }
   };
 
@@ -231,6 +230,20 @@ const OrderingInterface: React.FC<OrderingInterfaceProps> = ({
 
       setIsModalOpen(false);
       setCustomizingItem(null);
+  };
+
+  // 處理餐點客製化確認
+  const handleRestaurantCustomizationConfirm = (customizedItem: OrderItem) => {
+    if (!activeMemberId) return;
+    onAddItem(activeMemberId, customizedItem);
+    setShowRestaurantCustomizationDialog(false);
+    setCustomizingItem(null);
+  };
+
+  // 處理餐點客製化取消
+  const handleRestaurantCustomizationCancel = () => {
+    setShowRestaurantCustomizationDialog(false);
+    setCustomizingItem(null);
   };
 
   const handleAddTempMember = () => {
@@ -348,12 +361,22 @@ const OrderingInterface: React.FC<OrderingInterfaceProps> = ({
   return (
     <div>
         {isModalOpen && customizingItem && (
-            <DrinkCustomizationModal 
-                item={customizingItem} 
+            <DrinkCustomizationModal
+                item={customizingItem}
                 toppings={drinkShop?.toppings || []}
-                onClose={() => setIsModalOpen(false)} 
+                onClose={() => setIsModalOpen(false)}
                 onConfirm={handleConfirmCustomization}
             />
+        )}
+
+        {/* 餐點客製化對話框 */}
+        {showRestaurantCustomizationDialog && customizingItem && restaurant && (
+          <RestaurantCustomizationDialog
+            item={customizingItem}
+            restaurant={restaurant}
+            onConfirm={handleRestaurantCustomizationConfirm}
+            onCancel={handleRestaurantCustomizationCancel}
+          />
         )}
 
         <Card className="mb-6 bg-indigo-50 border-indigo-200">

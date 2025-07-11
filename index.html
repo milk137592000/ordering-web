@@ -57,6 +57,10 @@
             getDoc: () => {
               console.log('📱 離線模式：返回本地數據');
               return Promise.resolve({ exists: () => false, data: () => ({}) });
+            },
+            runTransaction: () => {
+              console.log('📱 離線模式：事務操作已模擬');
+              return Promise.resolve();
             }
           };
         }

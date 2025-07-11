@@ -232,18 +232,18 @@ export async function waitForPageLoad(
   
   // 等待基本載入狀態
   await page.waitForLoadState('domcontentloaded', { timeout: opts.timeout });
-  
-  // 等待網路空閒
-  await page.waitForLoadState('networkidle', { timeout: opts.timeout });
-  
-  // 等待 React 渲染完成
+
+  // 跳過網路空閒等待，因為Firebase連接會持續活動
+  // await page.waitForLoadState('networkidle', { timeout: opts.timeout });
+
+  // 等待 React 渲染完成和主要元素出現
   await page.waitForFunction(() => {
-    return document.readyState === 'complete' && 
-           window.React !== undefined;
+    return document.readyState === 'complete' &&
+           document.querySelector('[data-testid="app-container"]') !== null;
   }, { timeout: opts.timeout });
-  
+
   // 額外等待確保動態內容載入
-  await page.waitForTimeout(1000);
+  await page.waitForTimeout(2000);
 }
 
 /**

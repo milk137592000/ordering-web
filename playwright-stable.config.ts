@@ -98,8 +98,8 @@ export default defineConfig({
   ],
 
   /* Global setup and teardown for stable tests */
-  globalSetup: require.resolve('./e2e/setup/stable-global-setup.ts'),
-  globalTeardown: require.resolve('./e2e/setup/stable-global-teardown.ts'),
+  // globalSetup: './e2e/setup/stable-global-setup.ts',
+  // globalTeardown: './e2e/setup/stable-global-teardown.ts',
 
   /* Run your local dev server before starting the tests */
   webServer: {

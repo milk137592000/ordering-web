@@ -8,6 +8,7 @@ export enum AppPhase {
   ORDERING, // 點餐階段
   RESTAURANT_ORDERING,
   DRINK_ORDERING,
+  MEMBER_ORDERING, // 非管理員統一點餐介面
   PERSONAL_SUMMARY,
   SUMMARY, // 訂單總覽
   ADMIN_MANAGEMENT,

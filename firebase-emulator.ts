@@ -103,7 +103,7 @@ export const initializeFirebaseServices = async () => {
   try {
     // 動態導入 Firebase 模組
     const { initializeApp } = await import("https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js");
-    const { getFirestore, connectFirestoreEmulator, doc, setDoc, updateDoc, onSnapshot, getDoc } =
+    const { getFirestore, connectFirestoreEmulator, doc, setDoc, updateDoc, onSnapshot, getDoc, runTransaction } =
       await import("https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js");
 
     const app = initializeApp(config);
@@ -114,25 +114,75 @@ export const initializeFirebaseServices = async () => {
 
     // 生產環境，嘗試連接但不強制要求成功
     console.log('🔥 正在初始化 Firestore 連接...');
-    try {
-      // 簡單的連接測試，使用更短的超時時間
+
+    // 增強的連接測試，包含多重檢查
+    const performConnectionTest = async () => {
       const testDoc = doc(db, 'sessions', 'test');
-      await Promise.race([
-        getDoc(testDoc),
-        new Promise((_, reject) =>
-          setTimeout(() => reject(new Error('連接超時')), 3000)
-        )
-      ]);
-      console.log('✅ Firestore 連接測試成功');
+
+      // 第一次嘗試：快速測試
+      try {
+        await Promise.race([
+          getDoc(testDoc),
+          new Promise((_, reject) =>
+            setTimeout(() => reject(new Error('快速連接測試超時 (5秒)')), 5000)
+          )
+        ]);
+        console.log('✅ Firestore 快速連接測試成功');
+        return true;
+      } catch (quickError) {
+        console.log('⚠️ 快速連接測試失敗，嘗試延長超時時間...');
+
+        // 第二次嘗試：延長超時時間
+        try {
+          await Promise.race([
+            getDoc(testDoc),
+            new Promise((_, reject) =>
+              setTimeout(() => reject(new Error('延長連接測試超時 (15秒)')), 15000)
+            )
+          ]);
+          console.log('✅ Firestore 延長連接測試成功');
+          return true;
+        } catch (extendedError) {
+          throw extendedError;
+        }
+      }
+    };
+
+    try {
+      await performConnectionTest();
       updateConnectionState(true, null);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
       console.log('ℹ️ Firestore 連接測試失敗，切換到離線模式:', errorMessage);
+
+      // 提供更詳細的錯誤信息和診斷
+      let detailedError = errorMessage;
+      let suggestions: string[] = [];
+
+      if (errorMessage.includes('network') || errorMessage.includes('fetch')) {
+        detailedError = '網路連接問題';
+        suggestions = ['檢查網路連接', '嘗試重新連接WiFi', '檢查防火牆設定'];
+      } else if (errorMessage.includes('permission') || errorMessage.includes('unauthorized')) {
+        detailedError = 'Firebase 權限問題';
+        suggestions = ['聯繫管理員檢查權限', '確認API密鑰正確'];
+      } else if (errorMessage.includes('quota') || errorMessage.includes('limit')) {
+        detailedError = 'Firebase 配額已滿';
+        suggestions = ['稍後再試', '聯繫管理員檢查配額'];
+      } else if (errorMessage.includes('timeout') || errorMessage.includes('超時')) {
+        detailedError = '連接超時';
+        suggestions = ['檢查網路速度', '稍後重試', '嘗試重新整理頁面'];
+      } else {
+        suggestions = ['重新整理頁面', '檢查網路連接', '聯繫技術支援'];
+      }
+
       // 設置為離線模式，但不影響應用運行
-      updateConnectionState(false, `離線模式: ${errorMessage}`);
+      updateConnectionState(false, `離線模式: ${detailedError}`);
+
+      // 在控制台輸出建議
+      console.log('💡 建議解決方案:', suggestions);
     }
 
-    return { db, doc, setDoc, updateDoc, onSnapshot, getDoc };
+    return { db, doc, setDoc, updateDoc, onSnapshot, getDoc, runTransaction };
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     console.log("ℹ️ Firebase 初始化失敗，使用離線模式:", errorMessage);
@@ -157,6 +207,10 @@ export const initializeFirebaseServices = async () => {
       getDoc: () => {
         console.log('📱 離線模式：返回本地數據');
         return Promise.resolve({ exists: () => false, data: () => ({}) });
+      },
+      runTransaction: () => {
+        console.log('📱 離線模式：事務操作已模擬');
+        return Promise.resolve();
       }
     };
   }

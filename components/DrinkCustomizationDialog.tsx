@@ -16,12 +16,28 @@ const DrinkCustomizationDialog: React.FC<DrinkCustomizationDialogProps> = ({
 }) => {
   const [sweetness, setSweetness] = useState(7);
   const [ice, setIce] = useState(7);
+  const [otherRequirements, setOtherRequirements] = useState('');
+  const [additionalCost, setAdditionalCost] = useState(0);
 
   const handleConfirm = () => {
+    console.log('確認飲料客製化:', { sweetness, ice, otherRequirements, additionalCost, itemName: item.name });
+
+    // 計算總價格（原價 + 額外費用）
+    const totalPrice = item.price + additionalCost;
+
+    // 建立客製化描述
+    let customizations = `甜度${sweetness}分，冰塊${ice}分`;
+    if (otherRequirements.trim()) {
+      customizations += `，其他要求：${otherRequirements.trim()}`;
+    }
+    if (additionalCost > 0) {
+      customizations += `，額外費用：$${additionalCost}`;
+    }
+
     const orderItem: OrderItem = {
       id: item.id,
       name: item.name,
-      price: item.price,
+      price: totalPrice,
       instanceId: `drink-${item.id}-${Date.now()}-${Math.random()}`,
       storeType: 'drink_shop',
       type: 'drink',
@@ -30,9 +46,12 @@ const DrinkCustomizationDialog: React.FC<DrinkCustomizationDialogProps> = ({
       storeName: drinkShop?.name || '',
       sweetness,
       ice,
-      customizations: `甜度${sweetness}分，冰塊${ice}分`
+      otherRequirements: otherRequirements.trim(),
+      additionalCost,
+      customizations
     };
 
+    console.log('創建的訂單項目:', orderItem);
     onConfirm(orderItem);
   };
 
@@ -61,7 +80,14 @@ const DrinkCustomizationDialog: React.FC<DrinkCustomizationDialogProps> = ({
         
         <div className="mb-4">
           <h4 className="font-semibold text-indigo-600 mb-2">{item.name}</h4>
-          <p className="text-gray-600">NT$ {item.price}</p>
+          <p className="text-gray-600">
+            原價：NT$ {item.price}
+            {additionalCost > 0 && (
+              <span className="ml-2 text-green-600 font-medium">
+                + NT$ {additionalCost} = NT$ {item.price + additionalCost}
+              </span>
+            )}
+          </p>
         </div>
 
         {/* 甜度選擇 */}
@@ -102,6 +128,37 @@ const DrinkCustomizationDialog: React.FC<DrinkCustomizationDialogProps> = ({
             <span>5 (少冰)</span>
             <span>10 (滿冰)</span>
           </div>
+        </div>
+
+        {/* 其他要求 */}
+        <div className="mb-6">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            其他要求
+          </label>
+          <textarea
+            value={otherRequirements}
+            onChange={(e) => setOtherRequirements(e.target.value)}
+            placeholder="請輸入特殊要求（例如：少珍珠、多奶泡等）"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 resize-none"
+            rows={3}
+          />
+        </div>
+
+        {/* 額外費用 */}
+        <div className="mb-6">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            額外費用 (NT$)
+          </label>
+          <input
+            type="text"
+            value={additionalCost}
+            onChange={(e) => setAdditionalCost(Number(e.target.value) || 0)}
+            placeholder="0"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+          />
+          <p className="text-xs text-gray-500 mt-1">
+            如有額外加料或特殊要求需要費用，請輸入金額
+          </p>
         </div>
 
         {/* 按鈕 */}

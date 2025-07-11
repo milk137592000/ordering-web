@@ -108,14 +108,21 @@ const DrinkOrderingInterface: React.FC<DrinkOrderingInterfaceProps> = ({
       return;
     }
 
+    console.log('點擊飲料項目:', item.name, '為用戶:', selectedUserName);
+
     // 顯示客製化對話框
     setCustomizingItem(item);
     setShowCustomizationDialog(true);
-  }, [selectedUserId]);
+    console.log('設定客製化對話框狀態:', true);
+  }, [selectedUserId, selectedUserName]);
 
   // 處理客製化完成
   const handleCustomizationConfirm = useCallback((customizedItem: OrderItem) => {
+    console.log('處理客製化完成:', customizedItem);
+
     setCurrentItems(prev => {
+      console.log('當前項目列表:', prev);
+
       const existingIndex = prev.findIndex(i =>
         i.name === customizedItem.name &&
         i.type === 'drink' &&
@@ -125,6 +132,7 @@ const DrinkOrderingInterface: React.FC<DrinkOrderingInterfaceProps> = ({
       );
 
       if (existingIndex >= 0) {
+        console.log('找到相同項目，增加數量');
         const updated = [...prev];
         updated[existingIndex] = {
           ...updated[existingIndex],
@@ -132,12 +140,14 @@ const DrinkOrderingInterface: React.FC<DrinkOrderingInterfaceProps> = ({
         };
         return updated;
       } else {
+        console.log('添加新項目');
         return [...prev, customizedItem];
       }
     });
 
     setShowCustomizationDialog(false);
     setCustomizingItem(null);
+    console.log('關閉客製化對話框');
   }, []);
 
   // 處理客製化取消
@@ -332,7 +342,15 @@ const DrinkOrderingInterface: React.FC<DrinkOrderingInterfaceProps> = ({
         <Button onClick={onBack} variant="secondary" className="flex-1">
           返回餐廳點餐
         </Button>
-        <Button onClick={onComplete} className="flex-1">
+        <Button
+          onClick={() => {
+            console.log('🎯 點擊完成點餐設定按鈕');
+            console.log('🔧 調用 onComplete 函數');
+            onComplete();
+            console.log('✅ onComplete 函數調用完成');
+          }}
+          className="flex-1"
+        >
           完成點餐設定
         </Button>
       </div>

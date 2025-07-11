@@ -3,6 +3,8 @@ import { Store, OrderItem } from '../types';
 import Button from './common/Button';
 import Card from './common/Card';
 import { PlusIcon, MinusIcon, UserIcon, ChevronDownIcon, ChevronUpIcon } from './icons';
+import DrinkCustomizationDialog from './DrinkCustomizationDialog';
+import RestaurantCustomizationDialog from './RestaurantCustomizationDialog';
 
 interface AdminOrderingInterfaceProps {
   restaurant: Store | null;
@@ -28,6 +30,9 @@ const AdminOrderingInterface: React.FC<AdminOrderingInterfaceProps> = ({
   const [showNewMemberInput, setShowNewMemberInput] = useState(false);
   const [isRestaurantExpanded, setIsRestaurantExpanded] = useState(true);
   const [isDrinkExpanded, setIsDrinkExpanded] = useState(true);
+  const [showCustomizationDialog, setShowCustomizationDialog] = useState(false);
+  const [showRestaurantCustomizationDialog, setShowRestaurantCustomizationDialog] = useState(false);
+  const [customizingItem, setCustomizingItem] = useState<any>(null);
 
   // 獲取所有用戶列表（團隊成員 + 已有訂單的用戶）
   const allUsers = React.useMemo(() => {
@@ -105,32 +110,19 @@ const AdminOrderingInterface: React.FC<AdminOrderingInterfaceProps> = ({
       return;
     }
 
-    const orderItem: OrderItem = {
-      id: `${type}-${item.id}-${Date.now()}`,
-      name: item.name,
-      price: item.price,
-      type: type,
-      quantity: 1,
-      storeId: type === 'restaurant' ? restaurant?.id || 0 : drinkShop?.id || 0,
-      storeName: type === 'restaurant' ? restaurant?.name || '' : drinkShop?.name || ''
-    };
+    // 如果是飲料，顯示飲料客製化對話框
+    if (type === 'drink') {
+      setCustomizingItem(item);
+      setShowCustomizationDialog(true);
+      return;
+    }
 
-    setCurrentItems(prev => {
-      const existingIndex = prev.findIndex(i => 
-        i.name === item.name && i.type === type && i.storeId === orderItem.storeId
-      );
-      
-      if (existingIndex >= 0) {
-        const updated = [...prev];
-        updated[existingIndex] = {
-          ...updated[existingIndex],
-          quantity: updated[existingIndex].quantity + 1
-        };
-        return updated;
-      } else {
-        return [...prev, orderItem];
-      }
-    });
+    // 如果是餐點，顯示餐點客製化對話框
+    if (type === 'restaurant') {
+      setCustomizingItem(item);
+      setShowRestaurantCustomizationDialog(true);
+      return;
+    }
   }, [selectedUserId, restaurant, drinkShop]);
 
   // 減少商品數量
@@ -185,6 +177,32 @@ const AdminOrderingInterface: React.FC<AdminOrderingInterfaceProps> = ({
     });
   }, []);
 
+  // 處理飲料客製化完成
+  const handleCustomizationConfirm = useCallback((customizedItem: OrderItem) => {
+    setCurrentItems(prev => [...prev, customizedItem]);
+    setShowCustomizationDialog(false);
+    setCustomizingItem(null);
+  }, []);
+
+  // 處理飲料客製化取消
+  const handleCustomizationCancel = useCallback(() => {
+    setShowCustomizationDialog(false);
+    setCustomizingItem(null);
+  }, []);
+
+  // 處理餐點客製化完成
+  const handleRestaurantCustomizationConfirm = useCallback((customizedItem: OrderItem) => {
+    setCurrentItems(prev => [...prev, customizedItem]);
+    setShowRestaurantCustomizationDialog(false);
+    setCustomizingItem(null);
+  }, []);
+
+  // 處理餐點客製化取消
+  const handleRestaurantCustomizationCancel = useCallback(() => {
+    setShowRestaurantCustomizationDialog(false);
+    setCustomizingItem(null);
+  }, []);
+
   // 保存當前用戶的訂單
   const handleSaveOrder = useCallback(() => {
     if (!selectedUserId || !selectedUserName) {
@@ -195,6 +213,17 @@ const AdminOrderingInterface: React.FC<AdminOrderingInterfaceProps> = ({
     onOrderUpdate(selectedUserId, selectedUserName, currentItems);
     alert(`已保存 ${selectedUserName} 的訂單`);
   }, [selectedUserId, selectedUserName, currentItems, onOrderUpdate]);
+
+  // 完成點餐設定（自動保存當前訂單）
+  const handleComplete = useCallback(() => {
+    // 如果有選中的用戶且有訂單項目，自動保存
+    if (selectedUserId && selectedUserName && currentItems.length > 0) {
+      onOrderUpdate(selectedUserId, selectedUserName, currentItems);
+      console.log(`🔄 自動保存 ${selectedUserName} 的訂單，共 ${currentItems.length} 項`);
+    }
+
+    onComplete();
+  }, [selectedUserId, selectedUserName, currentItems, onOrderUpdate, onComplete]);
 
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-6">
@@ -426,10 +455,30 @@ const AdminOrderingInterface: React.FC<AdminOrderingInterfaceProps> = ({
 
       {/* 完成按鈕 */}
       <div className="text-center">
-        <Button onClick={onComplete} size="large">
+        <Button onClick={handleComplete} size="large">
           完成點餐設定
         </Button>
       </div>
+
+      {/* 飲料客製化對話框 */}
+      {showCustomizationDialog && customizingItem && drinkShop && (
+        <DrinkCustomizationDialog
+          item={customizingItem}
+          drinkShop={drinkShop}
+          onConfirm={handleCustomizationConfirm}
+          onCancel={handleCustomizationCancel}
+        />
+      )}
+
+      {/* 餐點客製化對話框 */}
+      {showRestaurantCustomizationDialog && customizingItem && restaurant && (
+        <RestaurantCustomizationDialog
+          item={customizingItem}
+          restaurant={restaurant}
+          onConfirm={handleRestaurantCustomizationConfirm}
+          onCancel={handleRestaurantCustomizationCancel}
+        />
+      )}
     </div>
   );
 };

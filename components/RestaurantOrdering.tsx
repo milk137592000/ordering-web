@@ -3,6 +3,8 @@ import { Store, OrderItem, MenuItem } from '../types';
 import Button from './common/Button';
 import Card from './common/Card';
 import { PlusIcon, MinusIcon } from './icons';
+import CustomOptionDialog from './CustomOptionDialog';
+import RestaurantCustomizationDialog from './RestaurantCustomizationDialog';
 
 interface RestaurantOrderingProps {
   restaurant: Store;
@@ -23,6 +25,10 @@ const RestaurantOrdering: React.FC<RestaurantOrderingProps> = ({
   deadline,
   isDeadlineReached
 }) => {
+  const [showCustomOptionDialog, setShowCustomOptionDialog] = useState(false);
+  const [showRestaurantCustomizationDialog, setShowRestaurantCustomizationDialog] = useState(false);
+  const [customizingItem, setCustomizingItem] = useState<MenuItem | null>(null);
+
   // 計算特定品項的訂購數量
   const getItemQuantity = (itemId: number) => {
     return personalOrder.filter(orderItem => 
@@ -48,12 +54,47 @@ const RestaurantOrdering: React.FC<RestaurantOrderingProps> = ({
       return;
     }
 
-    const newOrderItem: OrderItem = {
-      ...item,
-      instanceId: `item-${Date.now()}-${Math.random()}`,
-      storeType: 'restaurant',
-    };
-    onAddItem(newOrderItem);
+    // 檢查是否是"其他選項"
+    if (item.id === 99999) {
+      console.log('點擊其他選項，顯示自定義對話框');
+      setShowCustomOptionDialog(true);
+      return;
+    }
+
+    // 顯示餐點客製化對話框
+    console.log('點擊餐點項目:', item.name);
+    setCustomizingItem(item);
+    setShowRestaurantCustomizationDialog(true);
+  };
+
+  // 處理自定義選項確認
+  const handleCustomOptionConfirm = (customizedItem: OrderItem) => {
+    console.log('處理自定義選項確認:', customizedItem);
+    onAddItem(customizedItem);
+    setShowCustomOptionDialog(false);
+    console.log('添加自定義選項並關閉對話框');
+  };
+
+  // 處理自定義選項取消
+  const handleCustomOptionCancel = () => {
+    console.log('取消自定義選項');
+    setShowCustomOptionDialog(false);
+  };
+
+  // 處理餐點客製化確認
+  const handleRestaurantCustomizationConfirm = (customizedItem: OrderItem) => {
+    console.log('處理餐點客製化確認:', customizedItem);
+    onAddItem(customizedItem);
+    setShowRestaurantCustomizationDialog(false);
+    setCustomizingItem(null);
+    console.log('添加餐點客製化項目並關閉對話框');
+  };
+
+  // 處理餐點客製化取消
+  const handleRestaurantCustomizationCancel = () => {
+    console.log('取消餐點客製化');
+    setShowRestaurantCustomizationDialog(false);
+    setCustomizingItem(null);
   };
 
   const restaurantTotal = personalOrder
@@ -191,6 +232,25 @@ const RestaurantOrdering: React.FC<RestaurantOrderingProps> = ({
           </div>
         </div>
       </div>
+
+      {/* 自定義選項對話框 */}
+      {showCustomOptionDialog && (
+        <CustomOptionDialog
+          restaurantName={restaurant.name}
+          onConfirm={handleCustomOptionConfirm}
+          onCancel={handleCustomOptionCancel}
+        />
+      )}
+
+      {/* 餐點客製化對話框 */}
+      {showRestaurantCustomizationDialog && customizingItem && (
+        <RestaurantCustomizationDialog
+          item={customizingItem}
+          restaurant={restaurant}
+          onConfirm={handleRestaurantCustomizationConfirm}
+          onCancel={handleRestaurantCustomizationCancel}
+        />
+      )}
     </div>
   );
 };

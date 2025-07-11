@@ -159,7 +159,8 @@ const App: React.FC = () => {
         const parsedMembers = await loadTeamMembers();
 
         const now = new Date().toISOString();
-        const orderId = `order_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        const randomNum = Math.floor(Math.random() * 1000000).toString().padStart(6, '0');
+        const orderId = randomNum;
 
         const newSession: SessionData = {
             phase: AppPhase.SETUP,
@@ -265,7 +266,11 @@ const App: React.FC = () => {
         sum + order.items.reduce((itemSum, item) => itemSum + item.price, 0), 0);
 
       // Handle legacy data without orderId
-      const orderId = sessionData.orderId || `legacy_order_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      let orderId = sessionData.orderId;
+      if (!orderId) {
+        const randomNum = Math.floor(Math.random() * 1000000).toString().padStart(6, '0');
+        orderId = randomNum;
+      }
       const orderDate = sessionData.orderDate || new Date().toISOString();
       const createdAt = sessionData.createdAt || new Date().toISOString();
 
@@ -368,6 +373,16 @@ const App: React.FC = () => {
     return new Map(sessionData?.teamMembers.map(m => [m.id, m.name]) || []);
   }, [sessionData?.teamMembers]);
 
+  // 將 memberOrders 轉換為 orders 格式以兼容 SummaryDisplay
+  const convertedOrders = useMemo(() => {
+    if (!sessionData?.memberOrders) return sessionData?.orders || [];
+
+    return Object.entries(sessionData.memberOrders).map(([userId, orderData]) => ({
+      memberId: userId,
+      items: orderData.items || []
+    }));
+  }, [sessionData?.memberOrders, sessionData?.orders]);
+
   const selectedRestaurant = useMemo(() => restaurants.find(r => r.id === sessionData?.selectedRestaurantId) || null, [restaurants, sessionData?.selectedRestaurantId]);
   const selectedDrinkShop = useMemo(() => drinkShops.find(s => s.id === sessionData?.selectedDrinkShopId) || null, [drinkShops, sessionData?.selectedDrinkShopId]);
 
@@ -434,7 +449,7 @@ const App: React.FC = () => {
                />;
       case AppPhase.SUMMARY:
         return <SummaryDisplay
-                  orders={sessionData.orders}
+                  orders={convertedOrders}
                   memberNameMap={memberNameMap}
                   onStartOver={handleCompleteOrder}
                   onBack={handleGoBack}

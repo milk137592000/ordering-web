@@ -32,9 +32,22 @@ const SummaryDisplay: React.FC<SummaryDisplayProps> = ({
   };
 
   const totals = useMemo(() => {
-    const grandTotal = orders.reduce((sum, order) => sum + order.items.reduce((itemSum, item) => itemSum + item.price, 0), 0);
+    console.log('🔍 SummaryDisplay 計算總金額 - orders:', orders);
+
+    const grandTotal = orders.reduce((sum, order) => {
+      const orderTotal = order.items.reduce((itemSum, item) => {
+        console.log(`🔍 計算項目: ${item.name}, 價格: ${item.price}`);
+        return itemSum + item.price;
+      }, 0);
+      console.log(`🔍 成員 ${order.memberId} 總計: ${orderTotal}`);
+      return sum + orderTotal;
+    }, 0);
+
     const foodTotal = orders.reduce((sum, order) => sum + calculateSubtotal(order.items, 'restaurant'), 0);
     const drinkTotal = orders.reduce((sum, order) => sum + calculateSubtotal(order.items, 'drink_shop'), 0);
+
+    console.log('🔍 SummaryDisplay 計算結果:', { grandTotal, foodTotal, drinkTotal });
+
     return { grandTotal, foodTotal, drinkTotal };
   }, [orders]);
   
