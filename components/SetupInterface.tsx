@@ -101,7 +101,18 @@ const SetupInterface: React.FC<SetupInterfaceProps> = ({
         alert('請至少選擇一間餐廳或飲料店');
         return;
       }
-      onComplete(deadline, selectedRestaurantId, selectedDrinkShopId);
+
+      // 🔧 修復：確保ID不為null時才傳遞，否則傳遞預設值
+      const finalRestaurantId = selectedRestaurantId || 1; // 預設為第一間餐廳
+      const finalDrinkShopId = selectedDrinkShopId || 1;   // 預設為第一間飲料店
+
+      console.log('🔍 SetupInterface 完成設定調試:');
+      console.log('- selectedRestaurantId:', selectedRestaurantId);
+      console.log('- selectedDrinkShopId:', selectedDrinkShopId);
+      console.log('- finalRestaurantId:', finalRestaurantId);
+      console.log('- finalDrinkShopId:', finalDrinkShopId);
+
+      onComplete(deadline, finalRestaurantId, finalDrinkShopId);
     }
   };
 
@@ -260,7 +271,10 @@ const SetupInterface: React.FC<SetupInterfaceProps> = ({
               {restaurants.map((restaurant) => (
                 <button
                   key={restaurant.id}
-                  onClick={() => setSelectedRestaurantId(restaurant.id)}
+                  onClick={() => {
+                    console.log('🔍 選擇餐廳:', restaurant.id, restaurant.name);
+                    setSelectedRestaurantId(restaurant.id);
+                  }}
                   className={`w-full p-4 border-2 rounded-lg text-left transition-colors ${
                     selectedRestaurantId === restaurant.id
                       ? 'border-indigo-500 bg-indigo-50 text-indigo-700'
@@ -315,7 +329,10 @@ const SetupInterface: React.FC<SetupInterfaceProps> = ({
               {drinkShops.map((shop) => (
                 <button
                   key={shop.id}
-                  onClick={() => setSelectedDrinkShopId(shop.id)}
+                  onClick={() => {
+                    console.log('🔍 選擇飲料店:', shop.id, shop.name);
+                    setSelectedDrinkShopId(shop.id);
+                  }}
                   className={`w-full p-4 border-2 rounded-lg text-left transition-colors ${
                     selectedDrinkShopId === shop.id
                       ? 'border-indigo-500 bg-indigo-50 text-indigo-700'

@@ -246,11 +246,39 @@ const NewApp: React.FC = () => {
             isOriginalAdmin
           });
 
-          // 如果訂單已經進入總結階段，管理員應該能看到總結
+          // 🔧 修復：如果訂單已經進入總結階段，但未關閉，允許用戶重新進入點餐
           if (orderData.phase === AppPhase.SUMMARY) {
-            userPhase = isOriginalAdmin ? AppPhase.SUMMARY : AppPhase.PERSONAL_SUMMARY;
+            // 如果訂單已關閉，則顯示總結頁面
+            if (orderData.isOrderClosed) {
+              userPhase = isOriginalAdmin ? AppPhase.SUMMARY : AppPhase.PERSONAL_SUMMARY;
+            } else {
+              // 如果訂單未關閉，允許用戶重新進入點餐流程
+              if (isOriginalAdmin) {
+                userPhase = AppPhase.ADMIN_ORDERING;
+              } else if (orderData.selectedRestaurantId) {
+                userPhase = AppPhase.RESTAURANT_ORDERING;
+              } else if (orderData.selectedDrinkShopId) {
+                userPhase = AppPhase.DRINK_ORDERING;
+              } else {
+                userPhase = AppPhase.MEMBER_ORDERING;
+              }
+            }
           } else if (orderData.phase === AppPhase.PERSONAL_SUMMARY) {
-            userPhase = AppPhase.PERSONAL_SUMMARY;
+            // 個人總結階段，檢查是否已關閉
+            if (orderData.isOrderClosed) {
+              userPhase = AppPhase.PERSONAL_SUMMARY;
+            } else {
+              // 如果未關閉，允許重新進入點餐
+              if (isOriginalAdmin) {
+                userPhase = AppPhase.ADMIN_ORDERING;
+              } else if (orderData.selectedRestaurantId) {
+                userPhase = AppPhase.RESTAURANT_ORDERING;
+              } else if (orderData.selectedDrinkShopId) {
+                userPhase = AppPhase.DRINK_ORDERING;
+              } else {
+                userPhase = AppPhase.MEMBER_ORDERING;
+              }
+            }
           } else if (orderData.phase === AppPhase.RESTAURANT_ORDERING) {
             // 🔧 修復：如果是原始管理員，應該進入管理員點餐界面
             userPhase = isOriginalAdmin ? AppPhase.ADMIN_ORDERING : AppPhase.RESTAURANT_ORDERING;
@@ -1116,7 +1144,7 @@ const NewApp: React.FC = () => {
   }, [userSession, sessionData]);
 
   // 處理編輯訂單
-  const handleEditOrder = useCallback(() => {
+  const handleEditOrder = useCallback(async () => {
     if (!userSession || !sessionData) return;
 
     console.log('🔄 編輯訂單 - 調試信息:');
@@ -1132,27 +1160,56 @@ const NewApp: React.FC = () => {
       return;
     }
 
-    // 管理員和非管理員都回到統一點餐介面
-    // 優先選擇餐廳，如果沒有餐廳則選擇飲料店
-    let firstPhase: AppPhase;
-    if (sessionData.selectedRestaurantId) {
-      firstPhase = AppPhase.RESTAURANT_ORDERING;
-    } else if (sessionData.selectedDrinkShopId) {
-      firstPhase = AppPhase.DRINK_ORDERING;
-    } else {
-      // 如果都沒有，這是一個錯誤狀態
-      console.error('❌ 編輯訂單失敗：沒有找到選擇的店家');
-      setError('編輯訂單失敗：沒有找到選擇的店家');
-      return;
+    try {
+      // 管理員和非管理員都回到統一點餐介面
+      // 優先選擇餐廳，如果沒有餐廳則選擇飲料店
+      let firstPhase: AppPhase;
+      if (sessionData.selectedRestaurantId) {
+        firstPhase = AppPhase.RESTAURANT_ORDERING;
+      } else if (sessionData.selectedDrinkShopId) {
+        firstPhase = AppPhase.DRINK_ORDERING;
+      } else {
+        // 如果都沒有，這是一個錯誤狀態
+        console.error('❌ 編輯訂單失敗：沒有找到選擇的店家');
+        setError('編輯訂單失敗：沒有找到選擇的店家');
+        return;
+      }
+
+      console.log('🔄 編輯訂單 - 切換到階段:', firstPhase);
+
+      // 🔧 修復：同步到 Firebase
+      const { db, doc, updateDoc } = firebaseServices;
+      if (db) {
+        console.log('🔄 正在同步編輯訂單狀態到 Firebase...');
+        const orderRef = doc(db, 'orders', userSession.orderId!);
+        const editOrderUpdateData = cleanDataForFirebase({
+          phase: firstPhase
+        });
+
+        await updateDoc(orderRef, editOrderUpdateData);
+        console.log('✅ 編輯訂單狀態已同步到 Firebase');
+
+        // 更新本地會話數據
+        setSessionData(prev => prev ? {
+          ...prev,
+          phase: firstPhase
+        } : null);
+      } else {
+        console.log('❌ Firebase 數據庫不可用');
+      }
+
+      // 更新用戶會話
+      const updatedUserSession = {
+        ...userSession,
+        currentPhase: firstPhase
+      };
+      setUserSession(updatedUserSession);
+      console.log('✅ 編輯訂單處理成功');
+    } catch (error) {
+      console.error('❌ 編輯訂單失敗:', error);
+      const errorMessage = error instanceof Error ? error.message : '未知錯誤';
+      setError(`編輯訂單失敗：${errorMessage}。請檢查網路連接後重試。`);
     }
-
-    console.log('🔄 編輯訂單 - 切換到階段:', firstPhase);
-
-    const updatedUserSession = {
-      ...userSession,
-      currentPhase: firstPhase
-    };
-    setUserSession(updatedUserSession);
   }, [userSession, sessionData, restaurants.length, drinkShops.length]);
 
   // 處理查看所有人的訂單（僅管理員）
@@ -1160,29 +1217,14 @@ const NewApp: React.FC = () => {
     if (!userSession || !sessionData || userSession.role !== UserRole.ADMIN) return;
 
     try {
-      // 更新 Firebase 中的階段到 SUMMARY
-      const { db, doc, updateDoc } = firebaseServices;
-      if (db) {
-        const orderRef = doc(db, 'orders', userSession.orderId!);
-        const viewAllUpdateData = cleanDataForFirebase({
-          phase: AppPhase.SUMMARY
-        });
-
-        await updateDoc(orderRef, viewAllUpdateData);
-
-        // 更新本地會話數據
-        setSessionData(prev => prev ? {
-          ...prev,
-          phase: AppPhase.SUMMARY
-        } : null);
-      }
-
-      // 更新用戶會話到總結階段
+      // 更新用戶會話到總結階段（不需要更新 Firebase，因為數據已經存在）
       const updatedUserSession = {
         ...userSession,
         currentPhase: AppPhase.SUMMARY
       };
       setUserSession(updatedUserSession);
+
+      console.log('🔍 查看所有訂單 - 切換到總結階段');
     } catch (error) {
       console.error('❌ 查看所有訂單失敗:', error);
       setError('查看所有訂單失敗，請重試');
@@ -1244,6 +1286,37 @@ const NewApp: React.FC = () => {
     console.log('- selectedRestaurant:', selectedRestaurant);
     console.log('- selectedDrinkShop:', selectedDrinkShop);
   }
+
+  // 🚨 緊急修復：如果是訂單262739且缺少店家ID，自動修復
+  React.useEffect(() => {
+    const fixOrder262739 = async () => {
+      if (userSession?.orderId === '262739' && sessionData &&
+          (!sessionData.selectedRestaurantId || !sessionData.selectedDrinkShopId)) {
+        console.log('🚨 檢測到訂單262739缺少店家ID，開始自動修復...');
+
+        try {
+          const { db, doc, updateDoc } = firebaseServices;
+          if (db) {
+            const orderRef = doc(db, 'orders', '262739');
+            const updateData = {
+              selectedRestaurantId: 1,  // 吃什麼餐廳
+              selectedDrinkShopId: 100  // 麻古飲料店
+            };
+
+            console.log('📝 正在更新訂單262739:', updateData);
+            await updateDoc(orderRef, updateData);
+            console.log('✅ 訂單262739修復成功！');
+          }
+        } catch (error) {
+          console.error('❌ 修復訂單262739失敗:', error);
+        }
+      }
+    };
+
+    if (sessionData && userSession?.orderId === '262739') {
+      fixOrder262739();
+    }
+  }, [sessionData, userSession?.orderId, firebaseServices]);
 
 
 
